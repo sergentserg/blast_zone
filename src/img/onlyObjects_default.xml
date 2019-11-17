@@ -9,7 +9,7 @@
 	<SubTexture name="barrelRust_top.png" x="300" y="318" width="24" height="24"/>
 	<SubTexture name="barricadeMetal.png" x="296" y="184" width="28" height="28"/>
 	<SubTexture name="barricadeWood.png" x="298" y="72" width="28" height="28"/>
-	<SubTexture name="bulletBlue1.png" x="194" y="46" width="4" height="10"/>
+	<!-- <SubTexture name="bulletBlue1.png" x="194" y="46" width="4" height="10"/> -->
 	<SubTexture name="bulletBlue1_outline.png" x="181" y="106" width="8" height="14"/>
 	<SubTexture name="bulletBlue2.png" x="173" y="106" width="8" height="12"/>
 	<SubTexture name="bulletBlue2_outline.png" x="136" y="310" width="12" height="16"/>

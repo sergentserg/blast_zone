@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="24" height="16" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="12">
+ <tileset firstgid="1" name="rural_terrain_Kenney" tilewidth="64" tileheight="64" tilecount="40" columns="10">
+  <image source="../img/terrainTiles_default.png" width="640" height="256"/>
+ </tileset>
+ <tileset firstgid="41" name="game_objects" tilewidth="84" tileheight="64" tilecount="37" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
+   <image width="64" height="64" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/treeBrown_large.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="11.75" y="9" width="42.75" height="44.25"/>
+   </objectgroup>
+  </tile>
+  <tile id="1">
+   <image width="8" height="10" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/treeBrown_leaf.png"/>
+  </tile>
+  <tile id="2">
+   <image width="36" height="36" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/treeBrown_small.png"/>
+  </tile>
+  <tile id="3">
+   <image width="26" height="22" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/treeBrown_twigs.png"/>
+  </tile>
+  <tile id="4">
+   <image width="64" height="64" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/treeGreen_large.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="10.875" y="9.875" width="42.75" height="44.25"/>
+   </objectgroup>
+  </tile>
+  <tile id="5">
+   <image width="40" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barrelBlack_side.png"/>
+  </tile>
+  <tile id="6">
+   <image width="40" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barrelBlack_side.png"/>
+  </tile>
+  <tile id="7">
+   <image width="40" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barrelGreen_side.png"/>
+  </tile>
+  <tile id="8">
+   <image width="48" height="48" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barrelGreen_top.png"/>
+  </tile>
+  <tile id="9">
+   <image width="40" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barrelRed_side.png"/>
+  </tile>
+  <tile id="10">
+   <image width="48" height="48" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barrelRed_top.png"/>
+  </tile>
+  <tile id="11">
+   <image width="40" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barrelRust_side.png"/>
+  </tile>
+  <tile id="12">
+   <image width="48" height="48" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barrelRust_top.png"/>
+  </tile>
+  <tile id="13">
+   <image width="56" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barricadeMetal.png"/>
+  </tile>
+  <tile id="14">
+   <image width="56" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/barricadeWood.png"/>
+  </tile>
+  <tile id="15">
+   <image width="56" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/crateMetal.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="1.75" y="1.25" width="24" height="24.75"/>
+   </objectgroup>
+  </tile>
+  <tile id="16">
+   <image width="56" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/crateMetal_side.png"/>
+  </tile>
+  <tile id="17">
+   <image width="56" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/crateWood.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="2.75" y="1.125" width="24" height="24.75"/>
+   </objectgroup>
+  </tile>
+  <tile id="18">
+   <image width="56" height="56" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/crateWood_side.png"/>
+  </tile>
+  <tile id="19">
+   <image width="48" height="16" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/fenceRed.png"/>
+  </tile>
+  <tile id="20">
+   <image width="52" height="16" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/fenceYellow.png"/>
+  </tile>
+  <tile id="21">
+   <image width="50" height="50" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/oilSpill_large.png"/>
+  </tile>
+  <tile id="22">
+   <image width="14" height="14" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/oilSpill_small.png"/>
+  </tile>
+  <tile id="23">
+   <image width="32" height="22" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/sandbagBeige.png"/>
+  </tile>
+  <tile id="24">
+   <image width="84" height="55" source="../../../tankGame/kenney_topdowntanksredux/PNG/Retina/sandbagBeige_open.png"/>
+  </tile>
+  <tile id="25">
+   <image width="32" height="22" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/sandbagBrown.png"/>
+  </tile>
+  <tile id="26">
+   <image width="42" height="28" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/sandbagBrown_open.png"/>
+  </tile>
+  <tile id="27">
+   <image width="16" height="48" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/fenceRed - rotate.png"/>
+  </tile>
+  <tile id="28">
+   <image width="16" height="52" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/fenceYellow - rotate.png"/>
+  </tile>
+  <tile id="29">
+   <image width="28" height="42" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/sandbagBeige_openy.png"/>
+  </tile>
+  <tile id="30">
+   <image width="22" height="32" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/sandbagBrown - rotate.png"/>
+  </tile>
+  <tile id="31">
+   <image width="28" height="42" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/sandbagBrown_open-rotate.png"/>
+  </tile>
+  <tile id="32">
+   <image width="22" height="32" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/sandbagBeige - rotate.png"/>
+  </tile>
+  <tile id="33">
+   <image width="16" height="28" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/specialBarrel2_outline.png"/>
+  </tile>
+  <tile id="34">
+   <image width="52" height="60" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/tank_darkLarge.png"/>
+  </tile>
+  <tile id="35">
+   <image width="42" height="46" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/tank_blue.png"/>
+  </tile>
+  <tile id="36">
+   <image width="36" height="36" source="../../../tankGame/kenney_topdowntanksredux/PNG/Default size/treeGreen_small.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="78" source="road_tiles_Kenney.tsx"/>
+ <layer id="1" name="Ground" width="24" height="16" locked="1">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,8,21,21,22,21,
+1,14,3,15,1,1,1,1,1,1,4,3,3,3,3,3,3,3,3,28,23,23,32,23,
+1,2,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,8,21,21,22,21,
+1,16,3,12,3,3,3,3,3,3,17,1,1,1,1,1,1,1,1,8,21,21,22,21,
+1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,21,21,22,21,
+1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,21,21,22,21,
+1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,21,21,22,21,
+3,3,3,13,3,3,3,3,3,3,15,1,1,1,1,1,1,1,14,28,23,23,26,35,
+1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,2,8,21,21,21,22,
+1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,2,8,21,31,31,22,
+1,1,1,2,1,1,1,1,1,1,2,1,14,3,3,3,3,3,5,8,21,21,21,22,
+1,1,1,2,1,1,1,1,1,1,2,1,2,1,1,1,1,1,2,8,21,21,21,22,
+1,14,3,6,3,3,15,1,1,1,16,3,17,1,1,1,1,1,16,28,27,23,23,37,
+1,2,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,8,22,21,21,21,
+1,2,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,8,22,21,21,21,
+1,16,3,3,7,3,17,1,1,1,1,1,1,1,1,1,1,1,1,8,22,21,21,21
+</data>
+ </layer>
+ <layer id="2" name="Map_Elements" width="24" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,60,0,0,0,0,0,0,0,0,0,0,0,61,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,69,
+0,0,74,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,64,64,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,45,0,0,0,77,77,0,0,0,0,0,0,
+0,66,66,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+54,0,0,0,0,0,0,77,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+54,76,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+54,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,74,0,0,0,0,
+0,66,66,0,0,0,45,0,0,0,0,0,0,0,0,0,0,55,0,0,75,0,56,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,55,0,0,47,53,0,0,
+0,0,0,0,0,0,0,0,0,0,0,58,0,0,0,0,0,55,0,74,47,53,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,77,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,75,0,0,0,0,0,0,0,0,0,0,45,0,0,0,0,0,0,0,
+0,0,0,0,60,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61,0,0,0
+</data>
+ </layer>
+ <objectgroup id="5" name="Object Layer 1">
+  <object id="1" name="player" x="80" y="496" visible="0"/>
+  <object id="2" name="player" x="80" y="480"/>
+  <object id="3" name="smallBush" x="464" y="432"/>
+  <object id="5" name="smallBush" x="208" y="880"/>
+  <object id="6" name="smallBush" x="1040" y="304"/>
+  <object id="7" name="smallBush" x="1104" y="304"/>
+  <object id="8" name="enemyHeavy" x="1296" y="592"/>
+  <object id="9" name="turret" x="1232" y="560"/>
+  <object id="10" name="turret" x="144" y="176"/>
+  <object id="11" name="turret" x="1232" y="752"/>
+ </objectgroup>
+</map>

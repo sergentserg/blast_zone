@@ -1,7 +1,11 @@
 import pygame as pg
 import random
-import settings as cfg
+import src.settings as cfg
 import os
+from src.maps.tilemap import level1
+import src.input.input_manager as input_manager
+from src.ui.menu import Menu
+from src.ui.buttons import Button
 
 class Game:
     def __init__(self):
@@ -9,7 +13,6 @@ class Game:
         __init__: Initializes pygame modules and creates a screen and Clock.
 
         """
-        pg.init()
         self.screen = pg.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
         pg.display.set_caption(cfg.TITLE)
         self.game_dir = os.path.dirname(__file__)
@@ -18,6 +21,10 @@ class Game:
         # Used to keep pygame running
         self.running = True
 
+        # for object in object_layer:
+        #     if object.name == "player":
+        #         Player(object.x, object.y, turretFileName)
+
     def new(self):
         """
         new(): Creates a new set of sprites for the current game run, and
@@ -25,6 +32,10 @@ class Game:
 
         """
         self.all_sprites = pg.sprite.LayeredUpdates()
+        self.map_img = level1.make_map()
+        self.map_rect = self.map_img.get_rect()
+        self.input_state = input_manager.input_state
+        self.main_menu = Menu(*self.screen.get_rect())
         self.run()
 
     def run(self):
@@ -34,8 +45,10 @@ class Game:
         """
         # Used to continue game loop
         self.playing = True
+        self.t = 0
         while self.playing:
             self.dt = self.clock.tick(cfg.FPS) / 1000
+            self.t += self.dt
             self.process_inputs()
             self.update(self.dt)
             self.render()
@@ -48,6 +61,12 @@ class Game:
                     self.playing = False
                 self.running = False
 
+        self.input_state.update()
+        # if self.input_state.get_mousestate(0) == input_manager.InputState.JUST_PRESSED:
+        #     mouse_X, mouse_Y = pg.mouse.get_pos()
+        #     self.button.handle_input(mouse_X, mouse_Y, self.t)
+
+
     def update(self, dt):
         """  update(): Updates sprites in every group """
         self.all_sprites.update(dt)
@@ -58,6 +77,7 @@ class Game:
 
         """
         self.screen.fill(cfg.BLACK)
+        self.screen.blit(self.main_menu.img, self.main_menu.rect)
         self.all_sprites.draw(self.screen)
         pg.display.flip()
 
