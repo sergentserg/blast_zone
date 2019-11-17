@@ -1,5 +1,5 @@
-from .animatedSprite import AnimatedSprite
+from spriteW import SpriteW
 
-class Explosion(AnimatedSprite):
-    def __init__(self, x, y, filename):
-        AnimatedSprite.__init__(self, x, y, filename):
+class Explosion(SpriteW):
+    def __init__(self, x, y):
+        SpriteW.__init__(self, x, y, w, h, color):

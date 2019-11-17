@@ -1,3 +1,2 @@
-print("Loading all sprites...");
-__all__ = ['barrels', 'effects', 'interfaces', 'items',
-            'obstacles', 'tanks', 'animated_sprite', 'spriteW']
+#nothing
+__all__ = ['barrels', 'bullets', 'effects', 'items', 'obstacles', 'tanks']

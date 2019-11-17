@@ -1,61 +1,43 @@
 import pygame as pg
-import json
-from os import path
 
-class InputKeys:
-    STILL_RELEASED, JUST_PRESSED, JUST_RELEASED, STILL_PRESSED = 0, 1, 2, 3
+# 0, 0 -- STILL_RELEASED
+# 0, 1 -- JUST_PRESSED
+# 1, 0 -- JUST_RELEASED
+# 1, 1 -- STILL_PRESSED
+class InputState:
+    STILL_RELEASED, JUST_PRESSED, STILL_PRESSED, JUST_RELEASED = 0, 1, 2, 3
     def __init__(self):
-        self.current_state = pg.key.get_pressed()
-        self.last_state = self.current_state
+        # Keyboard
+        self.current_keys = pg.key.get_pressed()
+        self.prev_keys = None
 
-    def update_keys(self):
-        self.last_state = self.current_state
-        self.current_state = pg.key.get_pressed()
+        # Mouse
+        self.current_mouse = pg.mouse.get_pressed()
+        self.prev_mouse = None
 
-    def get_keystate(self, keycode):
-        if self.last_state[keycode]:
-            if self.current_state[keycode]:
-                return InputKeys.STILL_PRESSED
+    def update(self):
+        self.prev_keys = self.current_keys
+        self.current_keys = pg.key.get_pressed()
+
+        self.prev_mouse = self.current_mouse
+        self.current_mouse = pg.mouse.get_pressed()
+
+    def get_state(self, prev, current, keycode):
+        if prev[keycode]:
+            if current[keycode]:
+                return InputState.STILL_PRESSED
             else:
-                return InputKeys.JUST_RELEASED
+                return InputState.JUST_RELEASED
         else:
-            if self.current_state[keycode]:
-                return InputKeys.JUST_PRESSED
+            if current[keycode]:
+                return InputState.JUST_PRESSED
             else:
-                return InputKeys.STILL_RELEASED
+                return InputState.STILL_RELEASED
 
-class InputManager:
-    def __init__(self):
-        self.input_dir = path.dirname(__file__)
-        self.input_keys = InputKeys()
-        self.all_bindings = {}
-        self.init_bindings()
+    def key_state(self, keycode):
+        return self.get_state(self.prev_keys, self.current_keys, keycode)
 
-    def update(self, dt):
-        pass
+    def get_mousestate(self, button):
+        return self.get_state(self.prev_mouse, self.current_mouse, button)
 
-    def add_binding(self, name = 1, code = 2, type = 3):
-        """ addBinding(): adds a key binding to trigger an action with a key
-            name: action name, e.g., 'fire',
-            code: key code for action, e.g., pygame.K_a,
-            type: key state, e.g., JustPressed, JustReleased
-
-        """
-        self.input_keys.update_keys()
-        if self.input_keys.get_keystate(pg.K_a) == InputKeys.JUST_PRESSED:
-            print("a was pressed")
-            with open(path.join(self.input_dir, 'key_bindings.json'), 'r+') as f:
-                all_bindings = json.load(f)
-                if "a" not in all_bindings["fire"]:
-                    all_bindings["fire"].append("a")
-                f.seek(0)
-                f.truncate()
-                json.dump(all_bindings, f, indent = 4)
-
-    def init_bindings(self):
-        """ initBindings(): parses key bindings from a file """
-        with open(path.join(self.input_dir, 'key_bindings.json'), 'r') as f:
-            self.all_bindings = json.load(f)
-        print(self.all_bindings)
-
-input_handler = InputManager()
+input_state = InputState()
