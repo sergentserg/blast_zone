@@ -1,29 +1,28 @@
-from .buttons import Button
 import pygame as pg
+from .buttons import Button
+import src.settings as cfg
+import src.input.input_manager as input_manager
 
 class Menu:
-    def __init__(self, x, y, w, h):
-        # Create surface for the menu
-        self.img = pg.Surface((w, h))
-        self.img.fill((0, 0, 255))
-        self.rect = self.img.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+    def __init__(self):
         self.buttons = []
-        self.init_buttons()
-        # Create a list of buttons
-        # Blit the surface of the button relative onto to the menu surface
+        self.__init_buttons()
 
-    def init_buttons(self):
-        button_text = ["start", "options", "mute"]
-        b_w, b_h = 150, 50
-        spacing = 40
-        allButtonsHeight = (spacing*2*+b_h*3)
-        buttons_midtop = (self.rect.centerx - int(0.5*b_w), self.rect.centery - int(allButtonsHeight/2))
-        buttons_topleft = (buttons_midtop[0] - int(0.5*b_w), buttons_midtop[1])
+    def __init_buttons(self):
+        btn_txt = {'text': 'Button 1', 'size': 24, 'color': cfg.WHITE}
+        btn_imgs = ["blue_button04.png", "blue_button03.png"]
+        button1 = Button(cfg.SCREEN_WIDTH/2, cfg.SCREEN_HEIGHT/2,
+                            {'execute': lambda: print("Click!")},btn_txt, btn_imgs)
+        self.buttons.append(button1)
 
-        for foo in range(len(button_text)):
-            buttons123 = Button(buttons_topleft[0],buttons_topleft[1] + foo*(spacing+50),
-                                                b_w, b_h , button_text[foo])
-            self.buttons.append(buttons123)
-            self.img.blit(buttons123.img, buttons123.rect)
+    def handle_mouse(self, dt, mouse_state):
+        clicked = False
+        if mouse_state == input_manager.InputState.JUST_PRESSED:
+            clicked = True
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        for button in self.buttons:
+            button.handle_mouse(mouse_x, mouse_y, dt, clicked)
+
+    def draw(self, surface):
+        for button in self.buttons:
+            surface.blit(button.img, button.rect)

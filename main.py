@@ -2,7 +2,7 @@ import pygame as pg
 import random
 import src.settings as cfg
 import os
-from src.maps.tilemap import level1
+from src.utility.tilemap import level1
 import src.input.input_manager as input_manager
 from src.ui.menu import Menu
 from src.ui.buttons import Button
@@ -15,8 +15,6 @@ class Game:
         """
         self.screen = pg.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
         pg.display.set_caption(cfg.TITLE)
-        self.game_dir = os.path.dirname(__file__)
-        self.img_dir = os.path.join(self.game_dir, "img")
         self.clock = pg.time.Clock()
         # Used to keep pygame running
         self.running = True
@@ -31,11 +29,11 @@ class Game:
         starts up the game
 
         """
+        self.input_state = input_manager.input_state
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.map_img = level1.make_map()
         self.map_rect = self.map_img.get_rect()
-        self.input_state = input_manager.input_state
-        self.main_menu = Menu(*self.screen.get_rect())
+        self.menu = Menu()
         self.run()
 
     def run(self):
@@ -60,11 +58,12 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
+            elif event.type == pg.MOUSEMOTION:
+                # -1 indicates no button press at all
+                self.menu.handle_mouse(self.dt, -1)
 
         self.input_state.update()
-        # if self.input_state.get_mousestate(0) == input_manager.InputState.JUST_PRESSED:
-        #     mouse_X, mouse_Y = pg.mouse.get_pos()
-        #     self.button.handle_input(mouse_X, mouse_Y, self.t)
+        self.menu.handle_mouse(self.dt, self.input_state.get_mousestate(0))
 
 
     def update(self, dt):
@@ -77,10 +76,9 @@ class Game:
 
         """
         self.screen.fill(cfg.BLACK)
-        self.screen.blit(self.main_menu.img, self.main_menu.rect)
         self.all_sprites.draw(self.screen)
+        self.menu.draw(self.screen)
         pg.display.flip()
-
 
 g = Game()
 while g.running:
