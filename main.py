@@ -61,6 +61,9 @@ class Game:
             elif event.type == pg.MOUSEMOTION:
                 # -1 indicates no button press at all
                 self.menu.handle_mouse(self.dt, -1)
+            elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    print("Flagged for review.\n\n\n")
 
         self.input_state.update()
         self.menu.handle_mouse(self.dt, self.input_state.get_mousestate(0))
@@ -69,6 +72,7 @@ class Game:
     def update(self, dt):
         """  update(): Updates sprites in every group """
         self.all_sprites.update(dt)
+
 
     def render(self):
         """ render(): Draw and display sprites and other graphics

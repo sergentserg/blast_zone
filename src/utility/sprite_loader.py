@@ -4,8 +4,6 @@ import xml.etree.ElementTree as ET
 from src.settings import GAME_DIR
 
 class ImageLoader:
-
-
     def __init__(self):
         """ file_data = {"spritesheet": "file_name","xml": "file_name", "preloads": "file_name"}
 

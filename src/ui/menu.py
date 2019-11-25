@@ -16,12 +16,9 @@ class Menu:
         self.buttons.append(button1)
 
     def handle_mouse(self, dt, mouse_state):
-        clicked = False
-        if mouse_state == input_manager.InputState.JUST_PRESSED:
-            clicked = True
         mouse_x, mouse_y = pg.mouse.get_pos()
         for button in self.buttons:
-            button.handle_mouse(mouse_x, mouse_y, dt, clicked)
+            button.handle_mouse(mouse_x, mouse_y, dt, mouse_state)
 
     def draw(self, surface):
         for button in self.buttons:
