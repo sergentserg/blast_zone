@@ -10,15 +10,15 @@ class Menu:
 
     def __init_buttons(self):
         btn_txt = {'text': 'Button 1', 'size': 24, 'color': cfg.WHITE}
-        btn_imgs = ["blue_button04.png", "blue_button03.png"]
+        btn_imgs = ["blue_button04.png", "blue_button02.png", "blue_button03.png"]
         button1 = Button(cfg.SCREEN_WIDTH/2, cfg.SCREEN_HEIGHT/2,
-                            {'execute': lambda: print("Click!")},btn_txt, btn_imgs)
+                            lambda: print("Click!"), btn_txt, btn_imgs)
         self.buttons.append(button1)
 
     def handle_mouse(self, dt, mouse_state):
         mouse_x, mouse_y = pg.mouse.get_pos()
         for button in self.buttons:
-            button.handle_mouse(mouse_x, mouse_y, dt, mouse_state)
+            button.handle_mouse(mouse_x, mouse_y, mouse_state, dt)
 
     def draw(self, surface):
         for button in self.buttons:
