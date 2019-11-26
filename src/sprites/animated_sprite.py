@@ -1,4 +1,4 @@
-from math import floor
+self.imagefrom math import floor
 from .spriteW import SpriteW
 from src.utility.sprite_loader import img_loader
 
@@ -6,7 +6,7 @@ class AnimatedSprite(SpriteW):
     def __init__(self, x, y, img_files, frame_info):
         SpriteW.__init__(self, x, y, img_files[0])
         # Load all images
-        self.images = [self.img]
+        self.images = [self.image]
         self.images.extend([img_loader.get_image(img) for img in img_files[1:]])
         # Store animation data
         self.frame_info = [{"start_frame": data[0], "num_frames": data[1]} for data in frame_info]
@@ -27,7 +27,7 @@ class AnimatedSprite(SpriteW):
                 self.current_frame = self.current_frame % self.num_frames
 
             # Update the active image
-            self.img = self.images[self.current_frame]
+            self.image = self.images[self.current_frame]
             self.frame_time = self.frame_time % (1/self.anim_fps)
 
     def change_anim(self, num):
@@ -35,4 +35,4 @@ class AnimatedSprite(SpriteW):
         self.current_frame = 0
         self.frame_time = 0.0
         img_num = self.frame_info[self.anim_num]["start_frame"]
-        self.img = self.images[img_num]
+        self.image = self.images[img_num]

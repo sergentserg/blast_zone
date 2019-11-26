@@ -4,8 +4,6 @@ import src.settings as cfg
 import os
 from src.utility.tilemap import level1
 import src.input.input_manager as input_manager
-from src.ui.menu import Menu
-from src.ui.buttons import Button
 
 class Game:
     def __init__(self):
@@ -33,7 +31,7 @@ class Game:
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.map_img = level1.make_map()
         self.map_rect = self.map_img.get_rect()
-        self.menu = Menu()
+        level1.init_sprites(self.all_sprites)
         self.run()
 
     def run(self):
@@ -43,10 +41,8 @@ class Game:
         """
         # Used to continue game loop
         self.playing = True
-        self.t = 0
         while self.playing:
             self.dt = self.clock.tick(cfg.FPS) / 1000
-            self.t += self.dt
             self.process_inputs()
             self.update(self.dt)
             self.render()
@@ -58,15 +54,7 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
-            elif event.type == pg.MOUSEMOTION:
-                # -1 indicates no button press at all
-                self.menu.handle_mouse(self.dt, -1)
-            elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    print("Flagged for review.\n\n\n")
-
         self.input_state.update()
-        self.menu.handle_mouse(self.dt, self.input_state.get_mousestate(0))
 
 
     def update(self, dt):
@@ -80,8 +68,8 @@ class Game:
 
         """
         self.screen.fill(cfg.BLACK)
+        self.screen.blit(self.map_img, self.map_rect)
         self.all_sprites.draw(self.screen)
-        self.menu.draw(self.screen)
         pg.display.flip()
 
 g = Game()

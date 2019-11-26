@@ -30,5 +30,5 @@ class Button(AnimatedSprite):
         else:
             self.change_anim(Button.HOVER_OFF)
         # Update button position
-        self.rect = self.img.get_rect()
+        self.rect = self.image.get_rect()
         self.rect.bottomleft = old_bot

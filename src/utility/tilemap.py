@@ -5,6 +5,7 @@ import sys
 from os import path
 from src.settings import *
 from ..sprites.spriteW import SpriteW
+from src.sprites.barrels.barrel_factory import BarrelFactory
 
 class TiledMap:
     def __init__(self, filename):
@@ -23,9 +24,10 @@ class TiledMap:
                     if tile:
                         surface.blit(tile, (x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight))
 
+    def init_sprites(self, groups):
         for tile_object in self.tmxdata.objects:
-            if tile_object.name == 'woodbox':
-                print('A wooden box')
+            if tile_object.type == 'barrel':
+                BarrelFactory.create_barrel(tile_object, groups)
 
     def make_map(self):
         temp_surface = pg.Surface((self.width, self.height))
