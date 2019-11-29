@@ -1,4 +1,4 @@
-self.imagefrom math import floor
+from math import floor
 from .spriteW import SpriteW
 from src.utility.sprite_loader import img_loader
 

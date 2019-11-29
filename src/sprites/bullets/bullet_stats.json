@@ -1,32 +1,32 @@
 [
   {
     "type": "standard",
-    "damage": 8,
-    "speed": 200,
-    "range": 2000,
-    "max_ammo": 20,
-    "fire_rate": 3,
-    "reload_time": 1,
-    "can_pierce": false,
+    "stats": {
+      "damage": 8,
+      "speed": 200,
+      "lifetime": 5000,
+      "max_ammo": 20,
+      "can_pierce": false
+    }
   },
   {
     "type": "rapid",
-    "damage": 5,
-    "speed": 300,
-    "range": 2000,
-    "max_ammo": 20,
-    "fire_rate": 5,
-    "reload_time": 1,
-    "can_pierce": false,
+    "stats": {
+      "damage": 8,
+      "speed": 200,
+      "lifetime": 5000,
+      "max_ammo": 20,
+      "can_pierce": false
+    }
   },
   {
     "type": "power",
-    "damage": 12,
-    "speed": 150,
-    "range": 2000,
-    "max_ammo": 20,
-    "fire_rate": 2,
-    "reload_time": 3,
-    "can_pierce": true,
-  },
+    "stats": {
+      "damage": 8,
+      "speed": 200,
+      "lifetime": 5000,
+      "max_ammo": 20,
+      "can_pierce": false
+    }
+  }
 ]
