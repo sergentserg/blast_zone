@@ -1,32 +1,11 @@
-[
-  {
-    "type": "standard",
-    "stats": {
-      "damage": 8,
-      "speed": 200,
-      "lifetime": 5000,
-      "max_ammo": 20,
-      "can_pierce": false
-    }
+{
+  "standard": {
+    "damage": 8,"speed": 200,"lifetime": 5000,"max_ammo": 20,"can_pierce": false
   },
-  {
-    "type": "rapid",
-    "stats": {
-      "damage": 8,
-      "speed": 200,
-      "lifetime": 5000,
-      "max_ammo": 20,
-      "can_pierce": false
-    }
+  "rapid": {
+    "damage": 8,"speed": 200,"lifetime": 5000,"max_ammo": 20,"can_pierce": false
   },
-  {
-    "type": "power",
-    "stats": {
-      "damage": 8,
-      "speed": 200,
-      "lifetime": 5000,
-      "max_ammo": 20,
-      "can_pierce": false
+  "power": {
+    "damage": 8,"speed": 200,"lifetime": 5000,"max_ammo": 20,"can_pierce": false
     }
-  }
-]
+}

@@ -1,27 +1,29 @@
 from os import path
-import json
 import pygame as pg
 vec = pg.math.Vector2
 from src.sprites.spriteW import SpriteW
 from src.sprites.interfaces.movable import Movable
-
-def load_bullet_data():
-    bullet_stats_path = path.join(path.dirname(__file__), 'bullet_stats.json')
-    with open(bullet_stats_path, 'r') as f:
-        bullet_data = json.load(f)
-        bullet_dict = {bullet["type"]: bullet["stats"] for bullet in bullet_data}
-    return bullet_dict
+from src.utility.stats_loader import load_stats_data
+from src.settings import BULLET_LAYER
 
 class Bullet(SpriteW, Movable):
-    __bullet_dict = load_bullet_data()
+    __bullet_stats = load_stats_data(path.join(path.dirname(__file__), 'bullet_stats.json'))
 
+    TYPE = {"standard": 1, "power": 2, "rapid": 3}
     IMAGE_ROT = 90
-    def __init__(self, x, y, dir, type, img_file, groups):
+    def __init__(self, x, y, dir, bullet_type, color, groups):
+        img_file = "bullet{0}{1}.png".format(color, Bullet.TYPE.get(bullet_type))
         SpriteW.__init__(self, x, y, img_file, groups)
         Movable.__init__(self, x, y)
+        self.__init_bullet(dir, bullet_type)
+
+    def __init_bullet(self, dir, bullet_type):
+        self._layer = BULLET_LAYER
         # Bullets images are rotated 90 deg by default
-        self.image = pg.transform.rotate(self.image, dir - self.IMAGE_ROT)
-        self.stats = Bullet.__bullet_dict[type]
+        self.image = pg.transform.rotate(self.image, dir - Bullet.IMAGE_ROT)
+        self.rect = self.image.get_rect()
+        self.rect.center = self.pos
+        self.stats = Bullet.__bullet_stats[bullet_type]
         self.vel = vec(self.stats["speed"], 0).rotate(-dir)
         self.spawn_time = pg.time.get_ticks()
 
@@ -30,3 +32,4 @@ class Bullet(SpriteW, Movable):
             self.kill()
         else:
             self.move(dt)
+            # pass

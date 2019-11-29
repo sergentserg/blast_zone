@@ -455,20 +455,20 @@
 1,16,3,3,7,3,17,1,1,1,1,1,1,1,1,1,1,1,1,8,22,21,21,21
 </data>
  </layer>
- <layer id="2" name="Map_Elements" width="24" height="16">
+ <layer id="2" name="Map_Elements" width="24" height="16" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,145,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,166,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,217,217,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,217,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,160,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,145,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,166,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,163,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,145,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,166,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,217,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -483,20 +483,15 @@
   <object id="6" name="smallBush" x="1040" y="304"/>
   <object id="7" name="smallBush" x="1104" y="304"/>
   <object id="8" name="enemyHeavy" x="1281" y="563" width="60" height="72"/>
-  <object id="9" name="turret" x="1216" y="549" width="19" height="16"/>
-  <object id="11" name="power_barrel" type="turret" x="1217" y="742" width="17" height="16">
-   <properties>
-    <property name="img" value="power_barrel.png"/>
-   </properties>
-  </object>
   <object id="12" name="enemyHeavy" x="1281" y="563" width="60" height="72">
    <properties>
     <property name="img" value="tank_huge.png"/>
    </properties>
   </object>
-  <object id="13" name="power_barrel" type="barrel" x="128" y="172" width="17" height="16">
+  <object id="13" name="color_barrel" type="barrel" x="128" y="172" width="17" height="16">
    <properties>
-    <property name="img" value="power_barrel.png"/>
+    <property name="barrel_type" value="rapid"/>
+    <property name="color" value="Blue"/>
    </properties>
   </object>
  </objectgroup>

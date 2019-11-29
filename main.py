@@ -4,6 +4,7 @@ import src.settings as cfg
 import os
 from src.utility.tilemap import level1
 import src.input.input_manager as input_manager
+from src.utility.game_text import text_renderer
 
 class Game:
     def __init__(self):
@@ -70,6 +71,9 @@ class Game:
         self.screen.fill(cfg.BLACK)
         self.screen.blit(self.map_img, self.map_rect)
         self.all_sprites.draw(self.screen)
+        # for sprite in self.all_sprites:
+        #     pg.draw.rect(self.screen, (255, 255, 255), sprite.rect, 1)
+        pg.display.set_caption(" ".join([cfg.TITLE, " FPS: ", str(int(self.clock.get_fps()))]))
         pg.display.flip()
 
 g = Game()
