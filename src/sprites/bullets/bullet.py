@@ -15,12 +15,14 @@ def load_bullet_data():
 class Bullet(SpriteW, Movable):
     __bullet_dict = load_bullet_data()
 
+    IMAGE_ROT = 90
     def __init__(self, x, y, dir, type, img_file, groups):
         SpriteW.__init__(self, x, y, img_file, groups)
         Movable.__init__(self, x, y)
+        # Bullets images are rotated 90 deg by default
+        self.image = pg.transform.rotate(self.image, dir - self.IMAGE_ROT)
         self.stats = Bullet.__bullet_dict[type]
-        self.vel = vec(0, -self.stats["speed"]).rotate(dir)
-        print(self.vel)
+        self.vel = vec(self.stats["speed"], 0).rotate(-dir)
         self.spawn_time = pg.time.get_ticks()
 
     def update(self, dt):
