@@ -24,9 +24,11 @@ class Barrel(SpriteW, Rotatable):
         # Sound effects for firing/failing to fire
         # self.fire_sfx = None
         # self.no_ammo_sfx = None
+        self.parent = None
 
     def update(self, dt):
-        pass
+        if self.parent:
+            self.rect.center = self.parent.rect.center
 
     def fire(self):
         if (pg.time.get_ticks() - self.last_shot) > Barrel.__barrel_stats[self.type]["fire_delay"]:
@@ -49,6 +51,5 @@ class Barrel(SpriteW, Rotatable):
 
     # overload
     def kill(self):
-        # Call parent .kill()
-        # super().kill()
-        pass
+        self.parent = None
+        super().kill()
