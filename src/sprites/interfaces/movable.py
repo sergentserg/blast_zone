@@ -8,6 +8,7 @@ class Movable:
         self.acc = vec(0, 0)
 
     def move(self, dt):
+        # Kinematic equations
         self.vel += self.acc * dt
         self.pos += (self.vel * dt) + (0.5 * self.acc * dt**2)
         self.rect.center = self.pos

@@ -5,6 +5,7 @@ import os
 from src.utility.tilemap import level1
 import src.input.input_manager as input_manager
 from src.utility.game_text import text_renderer
+from src.sprites.tanks.color_tank import ColorTank
 
 class Game:
     def __init__(self):
@@ -30,6 +31,7 @@ class Game:
         """
         self.input_state = input_manager.input_state
         self.all_sprites = pg.sprite.LayeredUpdates()
+        ColorTank(200, 200, ColorTank.SAND, self.all_sprites)
         self.map_img = level1.make_map()
         self.map_rect = self.map_img.get_rect()
         level1.init_sprites(self.all_sprites)
@@ -61,13 +63,14 @@ class Game:
     def update(self, dt):
         """  update(): Updates sprites in every group """
         self.all_sprites.update(dt)
-
+        # Handle collisions
 
     def render(self):
         """ render(): Draw and display sprites and other graphics
         onto screen
 
         """
+        # Clear the screen
         self.screen.fill(cfg.BLACK)
         self.screen.blit(self.map_img, self.map_rect)
         self.all_sprites.draw(self.screen)

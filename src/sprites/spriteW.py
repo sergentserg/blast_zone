@@ -8,5 +8,5 @@ class SpriteW(pg.sprite.Sprite):
         self.image = img_loader.get_image(img_file)
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.centerx = x
+        self.rect.centery = y

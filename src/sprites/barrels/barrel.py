@@ -11,24 +11,22 @@ from src.settings import BARREL_LAYER
 class Barrel(SpriteW, Rotatable):
     __barrel_stats = load_stats_data(path.join(path.dirname(__file__), 'barrel_stats.json'))
     # TYPE = {"standard": 2, "power": 1, "rapid": 2}
-    def __init__(self, x, y, type, img_file, groups):
+    def __init__(self, x, y, type, img_file, groups, offset = 0):
         self._layer = BARREL_LAYER
         self.groups = groups
         SpriteW.__init__(self, x, y, img_file, groups)
         Rotatable.__init__(self)
+        self.rect.midtop = (x, y)
         # May groupd these in a json file for barrels too
         self.type = type
-        print(Barrel.__barrel_stats)
         self.ammo_count = Barrel.__barrel_stats[type]["max_ammo"]
         self.last_shot = pg.time.get_ticks()
         # Sound effects for firing/failing to fire
         # self.fire_sfx = None
         # self.no_ammo_sfx = None
-        self.parent = None
 
     def update(self, dt):
-        if self.parent:
-            self.rect.center = self.parent.rect.center
+        pass
 
     def fire(self):
         if (pg.time.get_ticks() - self.last_shot) > Barrel.__barrel_stats[self.type]["fire_delay"]:
@@ -51,5 +49,6 @@ class Barrel(SpriteW, Rotatable):
 
     # overload
     def kill(self):
-        self.parent = None
-        super().kill()
+        # Call parent .kill()
+        # super().kill()
+        pass
