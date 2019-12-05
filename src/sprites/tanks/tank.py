@@ -10,19 +10,24 @@ class Tank(SpriteW, Movable, Rotatable):
         Movable.__init__(self, x, y)
         Rotatable.__init__(self)
         self.barrel = None
-        self.vel = (0, 0)
-        self.rot = 0
+        self.barrel_offset = int(self.rect.h/3)
+        self.vel = (45, 55)
+        self.rot_speed = 60
 
     def set_barrel(self, barrel):
         pass
+
+    def rotate_barrel(self, aim_vec, dt):
+        pointing = aim_vec - vec(*self.rect.center)
+        self.barrel.rect.center = vec(*self.rect.center) + vec(self.barrel_offset, 0).rotate(pointing.angle_to(vec(1, 0)))
+        self.barrel.rot = self.rot
+        self.barrel.rotate(dt)
 
     def update(self, dt):
         # Call move? Should move check for collisions/out of bounds?
         self.rotate(dt)
         self.move(dt)
-        self.barrel.rect.midtop = vec(*self.rect.center).rotate(-self.rot)
-        self.barrel.rot = 0
-        self.barrel.rotate(dt)
+
 
 
     # Override rotate to call barrel's rotate? Maybe, maybe not

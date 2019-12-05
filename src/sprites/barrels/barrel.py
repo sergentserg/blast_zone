@@ -11,12 +11,11 @@ from src.settings import BARREL_LAYER
 class Barrel(SpriteW, Rotatable):
     __barrel_stats = load_stats_data(path.join(path.dirname(__file__), 'barrel_stats.json'))
     TYPES = {"standard": 1, "power": 2, "rapid": 3}
-    def __init__(self, x, y, type, image, groups, offset = 0):
+    def __init__(self, x, y, type, image, groups):
         SpriteW.__init__(self, x, y, image, groups)
         Rotatable.__init__(self)
         self._layer = BARREL_LAYER
         # Get rid of this at some point...
-        self.offset = offset
         self.groups = groups
         self.rect.midtop = (x, y)
         # May group these in a json file for barrels too
@@ -41,7 +40,7 @@ class Barrel(SpriteW, Rotatable):
 
     def __spawn_bullet(self):
         # spawn bullet at barrel's nose
-        bullet_pos = vec(*self.rect.center) + vec(self.offset, 0).rotate(-self.rot)
+        bullet_pos = vec(*self.rect.center) #+ vec(int(), 0).rotate(-self.rot)
         Bullet(bullet_pos.x, bullet_pos.y, self.rot, self.type, self.color, self.groups)
         self.ammo_count -= 1
         self.last_shot = pg.time.get_ticks()
