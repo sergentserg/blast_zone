@@ -3,13 +3,14 @@ from .spriteW import SpriteW
 from src.utility.sprite_loader import img_loader
 
 class AnimatedSprite(SpriteW):
-    def __init__(self, x, y, img_files, frame_info):
-        SpriteW.__init__(self, x, y, img_files[0])
+    def __init__(self, x, y, images, frame_info):
+        # Pass in default image
+        SpriteW.__init__(self, x, y, images[0])
         # Load all images
         self.images = [self.image]
-        self.images.extend([img_loader.get_image(img) for img in img_files[1:]])
+        self.images.extend([img_loader.get_image(img) for img in images[1:]])
         # Store animation data
-        self.frame_info = [{"start_frame": data[0], "num_frames": data[1]} for data in frame_info]
+        self.frame_info = frame_info
         # Animation 0 is the default
         self.change_anim(0)
         self.anim_fps = 24.0

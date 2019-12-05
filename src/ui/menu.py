@@ -9,10 +9,12 @@ class Menu:
         self.__init_buttons()
 
     def __init_buttons(self):
-        btn_txt = {'text': 'Button 1', 'size': 24, 'color': cfg.WHITE}
         btn_imgs = ["blue_button04.png", "blue_button02.png", "blue_button03.png"]
-        button1 = Button(cfg.SCREEN_WIDTH/2, cfg.SCREEN_HEIGHT/2,
-                            lambda: print("Click!"), btn_txt, btn_imgs)
+        button1 = Button(cfg.SCREEN_WIDTH/2,
+                            cfg.SCREEN_HEIGHT/2,
+                            btn_imgs,
+                            lambda: print("Click!"),
+                            text='Button 1', size='24', color=cfg.WHITE)
         self.buttons.append(button1)
 
     def handle_mouse(self, dt, mouse_state):

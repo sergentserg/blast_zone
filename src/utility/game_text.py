@@ -6,7 +6,7 @@ class TextRenderer:
         # Load all fonts
         self.fonts = {font: pg.font.match_font(font) for font in FONT_NAMES}
 
-    def render(self, surface, text, size, color, location = 'c', font_name = 'arial'):
+    def render(self, surface, text, size, color, location='c', font_name = 'arial'):
         # Create font object
         font_object = pg.font.Font(self.fonts[font_name], size)
 
@@ -16,26 +16,24 @@ class TextRenderer:
 
         # Determine where to blit the text
         if location =='nw':
-            dest = surface.get_rect().topleft
+            text_rect.topleft = surface.get_rect().topleft
         elif location =='n':
-            dest = surface.get_rect().midtop
+            text_rect.midtop = surface.get_rect().midtop
         elif location =='ne':
-            dest = surface.get_rect().topright
+            text_rect.topright = surface.get_rect().topright
         elif location =='w':
-            dest = surface.get_rect().midleft
+            text_rect.midleft = surface.get_rect().midleft
         elif location =='c':
-            dest = surface.get_rect().center
+            text_rect.center = surface.get_rect().center
         elif location =='e':
-            dest = surface.get_rect().midright
+            text_rect.midright = surface.get_rect().midright
         elif location =='sw':
-            dest = surface.get_rect().bottomleft
+            text_rect.bottomleft = surface.get_rect().bottomleft
         elif location =='s':
-            dest = surface.get_rect().midbottom
+            text_rect.midbottom = surface.get_rect().midbottom
         elif location =='se':
-            dest = surface.get_rect().bottomright
+            text_rect.bottomright = surface.get_rect().bottomright
 
-        # blit the text at dest
-        text_rect.center = dest
         surface.blit(text_surface, text_rect)
 
 text_renderer = TextRenderer()
