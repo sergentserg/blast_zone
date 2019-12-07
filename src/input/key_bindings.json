@@ -1,7 +1,4 @@
 {
-    "fire": [
-        "spacebar",
-        "a"
-    ],
+    "fire": [],
     "move": "w"
 }

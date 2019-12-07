@@ -13,7 +13,7 @@ class Rotatable:
         self.rot_speed = rot_speed
         self.orig_image = self.image
 
-    def rotate(self, dt):
+    def rotate(self, dt = 0):
         self.rot = (self.rot + self.rot_speed *  dt) % 360
         old_center = self.rect.center
         # Default image rotation means 0 rotation

@@ -11,17 +11,18 @@ class Tank(SpriteW, Movable, Rotatable):
         Rotatable.__init__(self)
         self.barrel = None
         self.barrel_offset = int(self.rect.h/3)
-        self.vel = (45, 55)
-        self.rot_speed = 60
+        # self.vel = (45, 55)
+        # self.rot_speed = 60
 
     def set_barrel(self, barrel):
         pass
 
-    def rotate_barrel(self, aim_vec, dt):
+    def rotate_barrel(self, aim_vec):
         pointing = aim_vec - vec(*self.rect.center)
-        self.barrel.rect.center = vec(*self.rect.center) + vec(self.barrel_offset, 0).rotate(pointing.angle_to(vec(1, 0)))
-        self.barrel.rot = self.rot
-        self.barrel.rotate(dt)
+        dir = pointing.angle_to(vec(1, 0))
+        self.barrel.rect.center = vec(*self.rect.center) + vec(self.barrel_offset, 0).rotate(-dir)
+        self.barrel.rot = dir
+        self.barrel.rotate()
 
     def update(self, dt):
         # Call move? Should move check for collisions/out of bounds?
