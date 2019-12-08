@@ -3,6 +3,7 @@ from os import path
 
 # Source directory
 GAME_DIR = path.dirname(__file__)
+MAP_DIR = path.join(GAME_DIR, 'maps')
 
 # Screen Settings
 SCREEN_WIDTH = 960

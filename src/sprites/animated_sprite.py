@@ -1,14 +1,17 @@
 from math import floor
 from .spriteW import SpriteW
 from src.utility.sprite_loader import img_loader
+import src.settings as cfg
 
 class AnimatedSprite(SpriteW):
-    def __init__(self, x, y, images, frame_info):
+    def __init__(self, x, y, groups, images, frame_info):
         # Pass in default image
-        SpriteW.__init__(self, x, y, images[0])
+        SpriteW.__init__(self, x, y, images[0], groups)
         # Load all images
         self.images = [self.image]
         self.images.extend([img_loader.get_image(img) for img in images[1:]])
+        for image in self.images:
+            image.set_colorkey(cfg.BLACK)
         # Store animation data
         self.frame_info = frame_info
         # Animation 0 is the default

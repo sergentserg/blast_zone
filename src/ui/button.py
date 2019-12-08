@@ -6,11 +6,11 @@ from src.input.input_manager import InputState
 
 class Button(AnimatedSprite):
     HOVER_OFF, HOVER_ON, CLICKED = 0, 1, 2
-    def __init__(self, x, y, img_files, action, **text):
+    def __init__(self, x, y, groups, img_files, action, **text):
         frame_info = [ {'start_frame': Button.HOVER_OFF, 'num_frames': 1},
                         {'start_frame': Button.HOVER_ON, 'num_frames': 1},
                         {'start_frame': Button.CLICKED, 'num_frames': 1}]
-        AnimatedSprite.__init__(self, x, y, img_files, frame_info)
+        AnimatedSprite.__init__(self, x, y, groups, img_files, frame_info)
         # Add Text to buttons
         for img in self.images:
             text_renderer.render(img, **text)

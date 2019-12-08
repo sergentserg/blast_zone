@@ -6,13 +6,24 @@ class TextRenderer:
         # Load all fonts
         self.fonts = {font: pg.font.match_font(font) for font in FONT_NAMES}
 
-    def render(self, surface, text, size, color, location='c', font_name = 'arial'):
+    def __render_text_surface(self, text, size, color, font_name = 'arial'):
         # Create font object
         font_object = pg.font.Font(self.fonts[font_name], size)
 
         # Create a text surface
         text_surface = font_object.render(text, True, color)
         text_rect = text_surface.get_rect()
+        return (text_surface, text_rect)
+
+        # Render at specified (x, y) [overloaded below]
+    def render_pos(self, surface, x, y, text, size, color, font_name = 'arial'):
+        text_surface, text_rect = self.__render_text_surface(text, size, color, font_name)
+        text_rect.center = (x, y)
+        surface.blit(text_surface, text_rect)
+
+        # Render at a relative cardinal location
+    def render(self, surface, text, size, color, location='c', font_name = 'arial'):
+        text_surface, text_rect = self.__render_text_surface(text, size, color, font_name)
 
         # Determine where to blit the text
         if location =='nw':

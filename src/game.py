@@ -2,10 +2,12 @@ import pygame as pg
 import random
 import src.settings as cfg
 import os
-from src.utility.tilemap import level1
+from src.utility.tiled_map_loader import TiledMapLoader
+from src.levels.level import Level
 import src.input.input_state as input_state
 from src.utility.game_text import text_renderer
 from src.entities.player_ctrl import PlayerCtrl
+from src.ui.pause_menu import PauseMenu
 
 class Game:
     def __init__(self):
@@ -19,8 +21,12 @@ class Game:
 
         # Clock object for time functions
         self.clock = pg.time.Clock()
-        # Used to keep pygame running
+        # Game Loop Flag
         self.running = True
+        # Game state variable
+        self.playing = False
+        # Debug flag
+        self.debug = False
 
     def new(self):
         """
@@ -29,11 +35,12 @@ class Game:
 
         """
         self.input_state = input_state.input_state
-        self.all_sprites = pg.sprite.LayeredUpdates()
-        self.player = PlayerCtrl(cfg.SCREEN_WIDTH/2, cfg.SCREEN_HEIGHT/2, "blue", self.all_sprites)
-        self.map_img = level1.make_map()
-        self.map_rect = self.map_img.get_rect()
-        level1.init_sprites(self.all_sprites)
+
+        self.map_loader = TiledMapLoader()
+        self.player = PlayerCtrl()
+        self.current_level = Level(self.map_loader, 'level_1.tmx', self.player)
+        self.menu_sprites = pg.sprite.Group()
+        self.pause_menu = PauseMenu(self.menu_sprites)
         self.run()
 
     def run(self):
@@ -58,11 +65,13 @@ class Game:
                 self.running = False
         self.input_state.update()
 
-
     def update(self, dt):
         """  update(): Updates sprites in every group """
+        mouse_state = self.input_state.get_mousestate(0)
+        self.pause_menu.handle_mouse(*pg.mouse.get_pos(), mouse_state, dt)
         self.player.handle_input(self.input_state, dt)
-        self.all_sprites.update(dt)
+        self.current_level.update(dt)
+        # self.all_sprites.update(dt)
         # Handle collisions
 
     def render(self):
@@ -72,10 +81,10 @@ class Game:
         """
         # Clear the screen
         self.screen.fill(cfg.BLACK)
-        self.screen.blit(self.map_img, self.map_rect)
-        self.all_sprites.draw(self.screen)
+        self.current_level.draw(self.screen)
         # for sprite in self.all_sprites:
         #     pg.draw.rect(self.screen, (255, 255, 255), sprite.rect, 1)
+        self.pause_menu.draw(self.screen)
         pg.display.set_caption(" ".join([cfg.TITLE, " FPS: ", str(int(self.clock.get_fps()))]))
         pg.display.flip()
 
