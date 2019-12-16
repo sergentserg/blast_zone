@@ -3,6 +3,7 @@ from os import path
 
 # Source directory
 GAME_DIR = path.dirname(__file__)
+IMG_DIR = path.join(GAME_DIR, 'img')
 MAP_DIR = path.join(GAME_DIR, 'maps')
 
 # Screen Settings

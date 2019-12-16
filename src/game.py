@@ -1,13 +1,9 @@
 import pygame as pg
-import random
+
 import src.settings as cfg
-import os
-from src.utility.tiled_map_loader import TiledMapLoader
-from src.levels.level import Level
-import src.input.input_state as input_state
-from src.utility.game_text import text_renderer
-from src.entities.player_ctrl import PlayerCtrl
-from src.ui.pause_menu import PauseMenu
+from src.game_state import GameNotPlayingState, GamePlayingState
+from src.ui.ui import GameUI
+from src.input.input_manager import InputManager
 
 class Game:
     def __init__(self):
@@ -15,77 +11,62 @@ class Game:
         __init__: Initializes pygame modules and creates a screen and Clock.
 
         """
-        # Screen for drawing game objects
+        # Initialize screen and clock.
         self.screen = pg.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
         pg.display.set_caption(cfg.TITLE)
-
-        # Clock object for time functions
         self.clock = pg.time.Clock()
-        # Game Loop Flag
-        self.running = True
-        # Game state variable
-        self.playing = False
-        # Debug flag
+
+        self.input_manager = InputManager(self)
+        self.ui = GameUI(self)
+
+        self.state = GameNotPlayingState(self)
+        self.state.enter()
+
+        self.paused = False
+
+        # Debug flag.
         self.debug = False
+        # Game Loop Flag.
+        self.running = True
 
-    def new(self):
-        """
-        new(): Creates a new set of sprites for the current game run, and
-        starts up the game
-
-        """
-        self.input_state = input_state.input_state
-
-        self.map_loader = TiledMapLoader()
-        self.player = PlayerCtrl()
-        self.current_level = Level(self.map_loader, 'level_1.tmx', self.player)
-        self.menu_sprites = pg.sprite.Group()
-        self.pause_menu = PauseMenu(self.menu_sprites)
-        self.run()
+    def set_state(self, new_state):
+        self.state.exit()
+        self.state = new_state
+        self.state.enter()
 
     def run(self):
-        """ run(): Runs game loop: sets frame rate, processes inputs,
-        updates sprites, and renders
+        """ run(): Runs game loop: caps frame rate, processes inputs,
+        updates sprites, and draws.
 
         """
         # Used to continue game loop
-        self.playing = True
-        while self.playing:
-            self.dt = self.clock.tick(cfg.FPS) / 1000
-            self.process_inputs()
-            self.update(self.dt)
-            self.render()
+        self.dt = self.clock.tick(cfg.FPS) / 1000
+        self.process_events()
+        self.update(self.dt)
+        self.draw()
 
-    def process_inputs(self):
-        """ Process user-inputs from the keyboard and mouse """
+    def process_events(self):
+        """ Process user-inputs from the keyboard and mouse. """
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                if self.playing:
-                    self.playing = False
                 self.running = False
-        self.input_state.update()
+            self.state.process_events(event)
+        self.input_manager.handle_inputs()
 
     def update(self, dt):
         """  update(): Updates sprites in every group """
-        mouse_state = self.input_state.get_mousestate(0)
-        self.pause_menu.handle_mouse(*pg.mouse.get_pos(), mouse_state, dt)
-        self.player.handle_input(self.input_state, dt)
-        self.current_level.update(dt)
-        # self.all_sprites.update(dt)
-        # Handle collisions
+        self.state.update(dt)
 
-    def render(self):
-        """ render(): Draw and display sprites and other graphics
-        onto screen
-
-        """
-        # Clear the screen
+    def draw(self):
+        """ draw(): Draws UI and game world onto screen. """
+        # Clear the screen.
         self.screen.fill(cfg.BLACK)
-        self.current_level.draw(self.screen)
-        # for sprite in self.all_sprites:
-        #     pg.draw.rect(self.screen, (255, 255, 255), sprite.rect, 1)
-        self.pause_menu.draw(self.screen)
-        pg.display.set_caption(" ".join([cfg.TITLE, " FPS: ", str(int(self.clock.get_fps()))]))
+
+        # Draw all sprites.
+        self.state.draw()
+
+        title = f"{cfg.TITLE} FPS: {int(self.clock.get_fps())}"
+        pg.display.set_caption(title)
         pg.display.flip()
 
     def quit(self):

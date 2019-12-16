@@ -32,6 +32,9 @@ class TiledMapLoader:
     def make_map(self, filename):
         self.__load_map(filename)
         temp_surface = pg.Surface((self.width, self.height))
-        temp_surface.set_colorkey(BLACK)
         self.__render(temp_surface)
+        temp_surface = temp_surface.convert_alpha()
+        temp_surface.set_colorkey(BLACK)
         return temp_surface
+
+map_loader = TiledMapLoader()

@@ -1,4 +1,17 @@
 {
-    "fire": [],
-    "move": "w"
+    "fire": [
+      {"keycode": " ", "state_type": 1}
+    ],
+    "forward": [
+      {"keycode": "w", "state_type": 2}
+    ],
+    "reverse": [
+      {"keycode": "s", "state_type": 2}
+    ],
+    "ccw_turn": [
+      {"keycode": "a", "state_type": 2}
+    ],
+    "cw_turn": [
+      {"keycode": "d", "state_type": 2}
+    ]
 }

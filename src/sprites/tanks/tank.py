@@ -5,6 +5,8 @@ import pygame as pg
 vec = pg.math.Vector2
 
 class Tank(SpriteW, Movable, Rotatable):
+    ACCELERATION = 250
+    ROT_SPEED = 75
     def __init__(self, x, y, img_file, groups):
         SpriteW.__init__(self, x, y, img_file, groups)
         Movable.__init__(self, x, y)
@@ -24,12 +26,13 @@ class Tank(SpriteW, Movable, Rotatable):
         self.barrel.rot = dir
         self.barrel.rotate()
 
+    def fire(self):
+        self.barrel.fire()
+
     def update(self, dt):
         # Call move? Should move check for collisions/out of bounds?
         self.rotate(dt)
         self.move(dt)
-
-
 
     # Override rotate to call barrel's rotate? Maybe, maybe not
     def rotate(self, dt):
