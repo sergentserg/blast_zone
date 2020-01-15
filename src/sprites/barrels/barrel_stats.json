@@ -1,11 +1,11 @@
 {
   "standard": {
-    "fire_delay":1000, "max_ammo":20
+    "fire_delay":500, "max_ammo":20
   },
   "rapid": {
-    "fire_delay":1000, "max_ammo":20
+    "fire_delay":400, "max_ammo":20
   },
   "power": {
-    "fire_delay":1000, "max_ammo":20
+    "fire_delay":600, "max_ammo":20
     }
 }

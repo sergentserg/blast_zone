@@ -7,7 +7,7 @@ class GameUI:
     def __init__(self, game):
         self.game = game
         self.ui_sprites = pg.sprite.Group()
-        self.menus = [MainMenu(self.ui_sprites, game)]
+        self.menus = []
 
     def handle_keys(self, active_bindings):
         pass
@@ -21,6 +21,9 @@ class GameUI:
             self.menus.append(PauseMenu(self.ui_sprites, self.game))
         else:
             self.pop_menu()
+
+    def main_menu(self):
+        self.menus.append(MainMenu(self.ui_sprites, self.game))
 
     def pop_menu(self):
         # Remove topmost menu

@@ -3,6 +3,7 @@ import pygame as pg
 vec = pg.math.Vector2
 from src.sprites.spriteW import SpriteW
 from src.sprites.interfaces.movable import Movable
+from src.sprites.interfaces.rotatable import Rotatable
 from src.utility.stats_loader import load_stats_data
 from src.settings import BULLET_LAYER
 
@@ -20,9 +21,7 @@ class Bullet(SpriteW, Movable):
     def __init_bullet(self, dir, bullet_type):
         self._layer = BULLET_LAYER
         # Bullets images are rotated 90 deg by default
-        self.image = pg.transform.rotate(self.image, dir - Bullet.IMAGE_ROT)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos
+        Rotatable.rotate_image(self, self.image, dir - Bullet.IMAGE_ROT)
         self.stats = Bullet.__bullet_stats[bullet_type]
         self.vel = vec(self.stats["speed"], 0).rotate(-dir)
         self.spawn_time = pg.time.get_ticks()

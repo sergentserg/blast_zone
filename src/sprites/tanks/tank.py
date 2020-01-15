@@ -1,18 +1,25 @@
-from ..spriteW import SpriteW
-from src.sprites.interfaces.movable import Movable
-from src.sprites.interfaces.rotatable import Rotatable
 import pygame as pg
 vec = pg.math.Vector2
 
-class Tank(SpriteW, Movable, Rotatable):
-    ACCELERATION = 250
+from ..spriteW import SpriteW
+from src.sprites.interfaces.movable import MovableNonlinear
+from src.sprites.interfaces.rotatable import Rotatable
+from src.settings import TANK_LAYER, TRACKS_LAYER
+
+class Tank(SpriteW, MovableNonlinear, Rotatable):
+    ACCELERATION = 768
     ROT_SPEED = 75
+    SPEED_CUTOFF = 100
+    TRACK_DELAY = 100
     def __init__(self, x, y, img_file, groups):
+        self._layer = TANK_LAYER
         SpriteW.__init__(self, x, y, img_file, groups)
-        Movable.__init__(self, x, y)
+        MovableNonlinear.__init__(self, x, y)
         Rotatable.__init__(self)
+        self.groups = groups
         self.barrel = None
-        self.barrel_offset = int(self.rect.h/3)
+        self.barrel_offset = int(self.orig_height/3)
+        self.last_track = 0
         # self.vel = (45, 55)
         # self.rot_speed = 60
 
@@ -33,6 +40,11 @@ class Tank(SpriteW, Movable, Rotatable):
         # Call move? Should move check for collisions/out of bounds?
         self.rotate(dt)
         self.move(dt)
+        if self.vel.length_squared() > self.SPEED_CUTOFF and (
+                    pg.time.get_ticks() - self.last_track) > Tank.TRACK_DELAY:
+            track_pos = self.pos
+            Tracks(*track_pos, self.orig_height, self.orig_width, self.rot, self.groups)
+            self.last_track = pg.time.get_ticks()
 
     # Override rotate to call barrel's rotate? Maybe, maybe not
     def rotate(self, dt):
@@ -46,3 +58,24 @@ class Tank(SpriteW, Movable, Rotatable):
     def kill(self):
         self.barrel.kill()
         super().kill()
+
+
+class Tracks(SpriteW):
+    image = 'tracksSmall.png'
+    IMG_ROT = -90
+    def __init__(self, x, y, scale_h, scale_w, rot, groups):
+        self._layer = TRACKS_LAYER
+        SpriteW.__init__(self, x, y, Tracks.image, groups)
+        old_center = self.rect.center
+        self.image = pg.transform.rotate(self.image, rot - Tracks.IMG_ROT)
+        self.image = pg.transform.scale(self.image, (scale_h, scale_w))
+        self.rect = self.image.get_rect()
+        self.rect.center = old_center
+        self.alpha = 255
+
+    def update(self, dt):
+        if self.alpha > 0:
+            self.alpha -= 2
+            self.image.set_alpha(self.alpha)
+        else:
+            self.kill()

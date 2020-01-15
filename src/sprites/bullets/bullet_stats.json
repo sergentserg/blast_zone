@@ -1,11 +1,11 @@
 {
   "standard": {
-    "damage": 8,"speed": 200,"lifetime": 5000,"max_ammo": 20,"can_pierce": false
+    "damage": 8,"speed": 500,"lifetime": 5000,"max_ammo": 20,"can_pierce": false
   },
   "rapid": {
-    "damage": 8,"speed": 200,"lifetime": 5000,"max_ammo": 20,"can_pierce": false
+    "damage": 8,"speed": 600,"lifetime": 5000,"max_ammo": 20,"can_pierce": false
   },
   "power": {
-    "damage": 8,"speed": 200,"lifetime": 5000,"max_ammo": 20,"can_pierce": false
+    "damage": 8,"speed": 400,"lifetime": 5000,"max_ammo": 20,"can_pierce": false
     }
 }

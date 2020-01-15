@@ -5,23 +5,22 @@ from src.settings import IMG_DIR, SCREEN_WIDTH, SCREEN_HEIGHT
 from src.levels.level import Level
 from src.entities.player_ctrl import PlayerCtrl
 
-class GameState:
-    def __init__(self, game):
-        self.game = game
-
-    def exit(self):
-        self.game = None
-
 class GameNotPlayingState:
     def __init__(self, game):
         self.game = game
 
     def enter(self):
+        """ Creates splash surface, as well as the main menu object from UI """
+
         self.splash_img = pg.image.load(path.join(IMG_DIR, "Sample.png")).convert_alpha()
         self.splash_img = pg.transform.scale(self.splash_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.splash_rect = self.splash_img.get_rect()
+        self.game.ui.main_menu()
 
     def exit(self):
+        """ Gets rid of topmost menu. Shows loading screen?"""
+
+        self.game.ui.pop_menu()
         self.game = None
 
     def process_events(self, event):
@@ -53,13 +52,17 @@ class GamePlayingState:
         self.game = game
 
     def enter(self):
-        self.player = PlayerCtrl()
-        self.level = Level('level_1.tmx', self.player)
+        self.create_level()
 
     def exit(self):
         # Save score or something
         # Kill all sprites?
-        pass
+        self.level = None
+        self.player = None
+
+    def create_level(self):
+        self.player = PlayerCtrl()
+        self.level = Level('level_1.tmx', self.player)
 
     def process_events(self, event):
         if event.type == pg.KEYDOWN:

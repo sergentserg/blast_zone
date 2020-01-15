@@ -15,8 +15,8 @@ class PlayerCtrl:
 
     def handle_keys(self, active_bindings):
         # Reset acceleration if no press
-        self.tank.acc = vec(0, 0)
         self.tank.rot_speed = 0
+        self.tank.acc = vec(0, 0)
         for name in active_bindings:
             # i.e. self.actions["fire"]
             if self.actions.get(name, None):
@@ -25,6 +25,9 @@ class PlayerCtrl:
     def handle_mouse(self, mouse_state, mouse_x, mouse_y):
         aim_vec = vec(*pg.mouse.get_pos())
         self.tank.rotate_barrel(aim_vec)
+
+        if mouse_state == InputState.JUST_PRESSED:
+            self.fire()
 
     def fire(self):
         self.tank.fire()

@@ -10,3 +10,5 @@ class SpriteW(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
+        self.orig_height = self.rect.h
+        self.orig_width = self.rect.w
