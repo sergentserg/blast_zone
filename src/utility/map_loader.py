@@ -1,16 +1,16 @@
-#Tilemap Demo from KidsCanCode
+# Tilemap Demo from KidsCanCode.
+# Augmented to initialize sprites based on tm object locations.
+from os import path
 import pygame as pg
 import pytmx
 import sys
-from os import path
 
-from src.settings import *
+import src.config as cfg
 from src.sprites.tanks.color_tank import ColorTank
-
 
 class TiledMapLoader:
     def _load_map(self, filename):
-        tm = pytmx.load_pygame(path.join(MAP_DIR, filename), pixelalpha = True)
+        tm = pytmx.load_pygame(path.join(cfg.MAP_DIR, filename), pixelalpha = True)
         self.width = tm.width * tm.tilewidth
         self.height = tm.height * tm.tileheight
         self.tmxdata = tm #stores data for later access
@@ -24,7 +24,7 @@ class TiledMapLoader:
                     if tile:
                         surface.blit(tile, (x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight))
         surface = surface.convert_alpha()
-        surface.set_colorkey(BLACK)
+        surface.set_colorkey(cfg.BLACK)
 
     def init_sprites(self, groups, player):
         for tile_object in self.tmxdata.objects:
@@ -37,4 +37,7 @@ class TiledMapLoader:
         self._render(temp_surface)
         return temp_surface
 
-map_loader = TiledMapLoader()
+_map_loader = TiledMapLoader()
+
+init_sprites = _map_loader.init_sprites
+make_map =  _map_loader.make_map

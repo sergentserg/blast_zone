@@ -1,12 +1,14 @@
 import pygame as pg
-from .. settings import FONT_NAMES
+
+# from src.settings import FONT_NAMES
+import src.config as cfg
 
 class TextRenderer:
     def __init__(self):
         # Load all fonts
-        self.fonts = {font: pg.font.match_font(font) for font in FONT_NAMES}
+        self.fonts = {font: pg.font.match_font(font) for font in cfg.FONT_NAMES}
 
-    def __render_text_surface(self, text, size, color, font_name = 'arial'):
+    def _render_text_surface(self, text, size, color, font_name = 'arial'):
         # Create font object
         font_object = pg.font.Font(self.fonts[font_name], size)
 
@@ -17,13 +19,13 @@ class TextRenderer:
 
         # Render at specified (x, y) [overloaded below]
     def render_pos(self, surface, x, y, text, size, color, font_name = 'arial'):
-        text_surface, text_rect = self.__render_text_surface(text, size, color, font_name)
+        text_surface, text_rect = self._render_text_surface(text, size, color, font_name)
         text_rect.center = (x, y)
         surface.blit(text_surface, text_rect)
 
         # Render at a relative cardinal location
     def render(self, surface, text, size, color, location='c', font_name = 'arial'):
-        text_surface, text_rect = self.__render_text_surface(text, size, color, font_name)
+        text_surface, text_rect = self._render_text_surface(text, size, color, font_name)
 
         # Determine where to blit the text
         if location =='nw':
@@ -47,4 +49,7 @@ class TextRenderer:
 
         surface.blit(text_surface, text_rect)
 
-text_renderer = TextRenderer()
+_text_renderer = TextRenderer()
+
+render = _text_renderer.render
+render_pos = _text_renderer.render_pos

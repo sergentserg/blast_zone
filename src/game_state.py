@@ -1,7 +1,7 @@
 from os import path
 import pygame as pg
 
-from src.settings import IMG_DIR, SCREEN_WIDTH, SCREEN_HEIGHT
+import src.config as cfg
 from src.levels.level import Level
 from src.entities.player_ctrl import PlayerCtrl
 
@@ -10,10 +10,13 @@ class GameNotPlayingState:
         self.game = game
 
     def enter(self):
-        """ Creates splash surface, as well as the main menu object from UI """
+        """ Creates splash surface, as well as the main menu object from UI. """
 
-        self.splash_img = pg.image.load(path.join(IMG_DIR, "Sample.png")).convert_alpha()
-        self.splash_img = pg.transform.scale(self.splash_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        splash_path = path.join(cfg.IMG_DIR, "Sample.png")
+        self.splash_img = pg.image.load(splash_path).convert_alpha()
+
+        dimensions = (cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT)
+        self.splash_img = pg.transform.scale(self.splash_img, dimensions)
         self.splash_rect = self.splash_img.get_rect()
         self.game.ui.main_menu()
 
@@ -34,10 +37,7 @@ class GameNotPlayingState:
             elif event.key == pg.K_DOWN:
                 pass
 
-    def handle_keys(self, active_bindings):
-        pass
-
-    def handle_mouse(self, mouse_state, mouse_x, mouse_y):
+    def handle_input(self, active_bindings, mouse_state, mouse_x, mouse_y):
         pass
 
     def update(self, dt):
@@ -53,6 +53,12 @@ class GamePlayingState:
 
     def enter(self):
         self.create_level()
+        # Load sounds?
+
+    # May be called from pause menu to issue a restart.
+    def create_level(self):
+        self.player = PlayerCtrl()
+        self.level = Level('level_1.tmx', self.player)
 
     def exit(self):
         # Save score or something
@@ -60,25 +66,14 @@ class GamePlayingState:
         self.level = None
         self.player = None
 
-    def create_level(self):
-        self.player = PlayerCtrl()
-        self.level = Level('level_1.tmx', self.player)
-
     def process_events(self, event):
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_p:
-                self.toggle_pause()
+                self.game.ui.toggle_pause()
 
-    def toggle_pause(self):
-        self.game.paused = not self.game.paused
-        self.game.ui.pause(self.game.paused)
-
-    def handle_keys(self, active_bindings):
+    def handle_input(self, active_bindings, mouse_state, mouse_x, mouse_y):
         if not self.game.paused:
             self.player.handle_keys(active_bindings)
-
-    def handle_mouse(self, mouse_state, mouse_x, mouse_y):
-        if not self.game.paused:
             self.player.handle_mouse(mouse_state, mouse_x, mouse_y)
 
     def update(self, dt):

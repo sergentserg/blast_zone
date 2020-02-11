@@ -1,5 +1,5 @@
-from .tank import Tank
-from src.sprites.barrels.color_barrel  import ColorBarrel
+from src.sprites.tanks.tank import Tank
+from src.sprites.barrels.color_barrel import ColorBarrel
 
 class ColorTank(Tank):
     BLUE, DARK, GREEN, SAND, RED =  "blue", "dark", "green", "sand", "red"

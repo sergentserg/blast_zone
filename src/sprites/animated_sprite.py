@@ -1,7 +1,7 @@
 from math import floor
 from .spriteW import SpriteW
-from src.utility.sprite_loader import img_loader
-import src.settings as cfg
+import src.utility.sprite_loader as sprite_loader
+import src.config as cfg
 
 class AnimatedSprite(SpriteW):
     def __init__(self, x, y, groups, images, frame_info):
@@ -9,7 +9,7 @@ class AnimatedSprite(SpriteW):
         SpriteW.__init__(self, x, y, images[0], groups)
         # Load all images
         self.images = [self.image]
-        self.images.extend([img_loader.get_image(img) for img in images[1:]])
+        self.images.extend([sprite_loader.get_image(img) for img in images[1:]])
         for image in self.images:
             image.set_colorkey(cfg.BLACK)
         # Store animation data

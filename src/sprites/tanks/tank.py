@@ -1,10 +1,10 @@
 import pygame as pg
 vec = pg.math.Vector2
 
-from ..spriteW import SpriteW
+import src.config as cfg
+from src.sprites.spriteW import SpriteW
 from src.sprites.interfaces.movable import MovableNonlinear
 from src.sprites.interfaces.rotatable import Rotatable
-from src.settings import TANK_LAYER, TRACKS_LAYER
 
 class Tank(SpriteW, MovableNonlinear, Rotatable):
     ACCELERATION = 768
@@ -12,7 +12,7 @@ class Tank(SpriteW, MovableNonlinear, Rotatable):
     SPEED_CUTOFF = 100
     TRACK_DELAY = 100
     def __init__(self, x, y, img_file, groups):
-        self._layer = TANK_LAYER
+        self._layer = cfg.TANK_LAYER
         SpriteW.__init__(self, x, y, img_file, groups)
         MovableNonlinear.__init__(self, x, y)
         Rotatable.__init__(self)
@@ -64,7 +64,7 @@ class Tracks(SpriteW):
     image = 'tracksSmall.png'
     IMG_ROT = -90
     def __init__(self, x, y, scale_h, scale_w, rot, groups):
-        self._layer = TRACKS_LAYER
+        self._layer = cfg.TRACKS_LAYER
         SpriteW.__init__(self, x, y, Tracks.image, groups)
         old_center = self.rect.center
         self.image = pg.transform.rotate(self.image, rot - Tracks.IMG_ROT)

@@ -7,13 +7,13 @@ vec = pg.math.Vector2
 from src.sprites.interfaces.rotatable import Rotatable
 from src.sprites.bullets.bullet import Bullet
 from src.utility.stats_loader import load_stats_data
-from src.settings import BARREL_LAYER, EFFECTS_LAYER
+import src.config as cfg
 
 class Barrel(SpriteW, Rotatable):
     __barrel_stats = load_stats_data(path.join(path.dirname(__file__), 'barrel_stats.json'))
     TYPES = {"standard": 1, "power": 2, "rapid": 3}
     def __init__(self, x, y, type, image, groups, offset = 0):
-        self._layer = BARREL_LAYER
+        self._layer = cfg.BARREL_LAYER
         SpriteW.__init__(self, x, y, image, groups)
         Rotatable.__init__(self)
         # Get rid of this at some point...
@@ -61,7 +61,7 @@ class MuzzleFlash(SpriteW):
     FLASH_DURATION = 25
     image = 'shotLarge.png'
     def __init__(self, x, y, rot, groups):
-        self._layer = EFFECTS_LAYER
+        self._layer = cfg.EFFECTS_LAYER
         SpriteW.__init__(self, x, y, MuzzleFlash.image, groups)
         Rotatable.rotate_image(self, self.image, rot - MuzzleFlash.IMG_ROT)
         self.spawn_time = pg.time.get_ticks()

@@ -5,14 +5,13 @@ from os import path
 GAME_DIR = path.dirname(__file__)
 IMG_DIR = path.join(GAME_DIR, 'img')
 MAP_DIR = path.join(GAME_DIR, 'maps')
+SND_DIR = path.join(GAME_DIR, 'snd')
 
 # Screen Settings
 SCREEN_WIDTH = 960
 SCREEN_HEIGHT = 800
 TITLE = "Blast Zone"
-
 FPS = 60
-
 
 # Color RGBs
 BLACK = (0, 0, 0)

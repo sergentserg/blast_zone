@@ -1,4 +1,4 @@
-from .barrel import Barrel
+from src.sprites.barrels.barrel import Barrel
 
 class ColorBarrel(Barrel):
     def __init__(self, x, y, color, type, groups):

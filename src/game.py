@@ -1,9 +1,10 @@
 import pygame as pg
 
-import src.settings as cfg
+import src.config as cfg
 from src.game_state import GameNotPlayingState
-from src.ui.ui import GameUI
+from src.ui.game_ui import GameUI
 from src.input.input_manager import InputManager
+
 
 class Game:
     def __init__(self):
@@ -25,8 +26,6 @@ class Game:
 
         self.paused = False
 
-        self.debug = False
-
         # Game Loop Flag.
         self.running = True
 
@@ -45,11 +44,11 @@ class Game:
         """
 
         self.dt = self.clock.tick(cfg.FPS) / 1000
-        self.process_events()
-        self.update(self.dt)
-        self.draw()
+        self._process_events()
+        self._update(self.dt)
+        self._draw()
 
-    def process_events(self):
+    def _process_events(self):
         """
         Processes events depending on the state, and delegates input handling to
         the input manager.
@@ -62,12 +61,11 @@ class Game:
             self.state.process_events(event)
         self.input_manager.handle_inputs()
 
-    def update(self, dt):
+    def _update(self, dt):
         """  update(): Updates sprites in every group """
-
         self.state.update(dt)
 
-    def draw(self):
+    def _draw(self):
         """ Clears screen and redraws all sprites depending on the state. """
         # Clear the screen.
         self.screen.fill(cfg.BLACK)
@@ -80,5 +78,5 @@ class Game:
         pg.display.flip()
 
     def quit(self):
-        """ Shuts down pygame subsystems"""
+        """ Shuts down pygame subsystems. """
         pg.quit()

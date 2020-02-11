@@ -1,9 +1,9 @@
 import pygame as pg
-from .button import Button
-import src.settings as cfg
-import src.input.input_state as input_state
-from src.utility.game_text import text_renderer
+
+import src.config as cfg
 from src.sprites.spriteW import SpriteW
+from src.ui.button import Button
+import src.utility.game_text as gtext
 
 class Menu(SpriteW):
     BUTTON_PADDING = 15
@@ -19,13 +19,16 @@ class Menu(SpriteW):
         height = (self.buttons[0].rect.h + Menu.BUTTON_PADDING) * (len(self.buttons) + 1)
         self.image = pg.transform.scale(self.image, (width, height))
         self.image.set_colorkey(cfg.BLACK)
+
         # Recenter menu surface
         self.rect = self.image.get_rect()
         self.rect.center = (cfg.SCREEN_WIDTH / 2, cfg.SCREEN_HEIGHT / 2)
+
         # Render menu title
-        text_renderer.render_pos(self.image, x=self.rect.w/2,
+        gtext.render_pos(self.image, x=self.rect.w/2,
                                     y=2*Menu.BUTTON_PADDING,
                                     text=self.title, size=Menu.TITLE_SIZE, color=cfg.WHITE)
+
         # Position buttons
         menu_offset = (Menu.TITLE_SIZE*2)  + self.rect.top
         for i in range(len(self.buttons)):

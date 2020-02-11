@@ -1,11 +1,12 @@
 from os import path
 import pygame as pg
 vec = pg.math.Vector2
+
 from src.sprites.spriteW import SpriteW
 from src.sprites.interfaces.movable import Movable
 from src.sprites.interfaces.rotatable import Rotatable
 from src.utility.stats_loader import load_stats_data
-from src.settings import BULLET_LAYER
+import src.config as cfg
 
 class Bullet(SpriteW, Movable):
     __bullet_stats = load_stats_data(path.join(path.dirname(__file__), 'bullet_stats.json'))
@@ -19,7 +20,7 @@ class Bullet(SpriteW, Movable):
         self.__init_bullet(dir, bullet_type)
 
     def __init_bullet(self, dir, bullet_type):
-        self._layer = BULLET_LAYER
+        self._layer = cfg.BULLET_LAYER
         # Bullets images are rotated 90 deg by default
         Rotatable.rotate_image(self, self.image, dir - Bullet.IMAGE_ROT)
         self.stats = Bullet.__bullet_stats[bullet_type]

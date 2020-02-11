@@ -1,5 +1,6 @@
 import pygame as pg
-from src.utility.map_loader import map_loader
+
+import src.utility.map_loader as map_loader
 
 class Level:
     def __init__(self, level_file, player):

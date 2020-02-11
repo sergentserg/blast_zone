@@ -1,5 +1,5 @@
 import pygame as pg
-from src.utility.game_text import text_renderer
+import src.utility.game_text as gtxt
 from src.sprites.animated_sprite import AnimatedSprite
 from src.input.input_state import InputState
 
@@ -12,7 +12,7 @@ class Button(AnimatedSprite):
         AnimatedSprite.__init__(self, 0, 0, groups, img_files, frame_info)
         # Add Text to buttons
         for img in self.images:
-            text_renderer.render(img, **text)
+            gtxt.render(img, **text)
         # on-click button function
         self.action = action
 

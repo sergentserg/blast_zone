@@ -1,6 +1,7 @@
 import pygame as pg
 vec = pg.math.Vector2
 
+# Import to access the keystate enums.
 from src.input.input_state import InputState
 
 class PlayerCtrl:

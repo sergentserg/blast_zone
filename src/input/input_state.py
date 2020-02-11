@@ -3,11 +3,11 @@ import pygame as pg
 class InputState:
     STILL_RELEASED, JUST_PRESSED, STILL_PRESSED, JUST_RELEASED = 0, 1, 2, 3
     def __init__(self):
-        # Keyboard
+        # Keyboard state boolean list.
         self.current_keys = pg.key.get_pressed()
         self.prev_keys = None
 
-        # Mouse
+        # Mouse state boolean list.
         self.current_mouse = pg.mouse.get_pressed()
         self.prev_mouse = None
 
@@ -37,4 +37,7 @@ class InputState:
     def get_mousestate(self, button):
         return self._get_state(self.prev_mouse, self.current_mouse, button)
 
-input_state = InputState()
+_input_state = InputState()
+get_keystate = _input_state.get_keystate
+get_mousestate = _input_state.get_mousestate
+update = _input_state.update

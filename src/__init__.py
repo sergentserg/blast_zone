@@ -1,5 +1,5 @@
 import pygame as pg
-import src.settings as cfg
+import src.config as cfg
 
 print("Initializing pygame")
 pg.init()
