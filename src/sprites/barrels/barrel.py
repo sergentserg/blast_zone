@@ -2,16 +2,19 @@ import json
 from os import path
 import pygame as pg
 
-from ..spriteW import SpriteW
-vec = pg.math.Vector2
-from src.sprites.interfaces.rotatable import Rotatable
+import src.config as cfg
+from src.sprites.spriteW import SpriteW
+import src.utility.sound_loader as sfx_loader
+from src.sprites.behaviors.rotatable import Rotatable
 from src.sprites.bullets.bullet import Bullet
 from src.utility.stats_loader import load_stats_data
-import src.config as cfg
+
+vec = pg.math.Vector2
 
 class Barrel(SpriteW, Rotatable):
     __barrel_stats = load_stats_data(path.join(path.dirname(__file__), 'barrel_stats.json'))
     TYPES = {"standard": 1, "power": 2, "rapid": 3}
+    FIRE_SFX = 'shoot.wav'
     def __init__(self, x, y, type, image, groups, offset = 0):
         self._layer = cfg.BARREL_LAYER
         SpriteW.__init__(self, x, y, image, groups)
@@ -25,7 +28,7 @@ class Barrel(SpriteW, Rotatable):
         self.ammo_count = Barrel.__barrel_stats[type]["max_ammo"]
         self.last_shot = 0
         # Sound effects for firing/failing to fire
-        # self.fire_sfx = None
+        self.fire_sfx = sfx_loader.get_sfx(Barrel.FIRE_SFX)
         # self.no_ammo_sfx = None
 
     def update(self, dt):
@@ -35,8 +38,7 @@ class Barrel(SpriteW, Rotatable):
         if (pg.time.get_ticks() - self.last_shot) > Barrel.__barrel_stats[self.type]["fire_delay"]:
             if self.ammo_count > 0:
                 self.__spawn_bullet()
-                #
-                # self.fire_sfx.play()
+                self.fire_sfx.play()
             else:
                 # self.no_ammo_sfx.play()
                 pass
@@ -51,10 +53,11 @@ class Barrel(SpriteW, Rotatable):
     def reload_ammo(self):
         self.ammo_count = Barrel.__barrel_stats[self.type]["max_ammo"]
 
-    # overload
+    # Override: remove reference to parent tank before killing.
     def kill(self):
         self.parent = None
         super().kill()
+
 
 class MuzzleFlash(SpriteW):
     IMG_ROT = -90
@@ -67,6 +70,5 @@ class MuzzleFlash(SpriteW):
         self.spawn_time = pg.time.get_ticks()
 
     def update(self, dt):
-        pass
         if (pg.time.get_ticks() - self.spawn_time) > MuzzleFlash.FLASH_DURATION:
             self.kill()

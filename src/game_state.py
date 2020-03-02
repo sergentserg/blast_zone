@@ -11,7 +11,6 @@ class GameNotPlayingState:
 
     def enter(self):
         """ Creates splash surface, as well as the main menu object from UI. """
-
         splash_path = path.join(cfg.IMG_DIR, "Sample.png")
         self.splash_img = pg.image.load(splash_path).convert_alpha()
 
@@ -27,15 +26,7 @@ class GameNotPlayingState:
         self.game = None
 
     def process_events(self, event):
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_UP:
-                pass
-            elif event.key == pg.K_DOWN:
-                pass
-            elif event.key == pg.K_LEFT:
-                pass
-            elif event.key == pg.K_DOWN:
-                pass
+        pass
 
     def handle_input(self, active_bindings, mouse_state, mouse_x, mouse_y):
         pass
@@ -55,8 +46,8 @@ class GamePlayingState:
         self.create_level()
         # Load sounds?
 
-    # May be called from pause menu to issue a restart.
     def create_level(self):
+        """ Creates a new player and restarts level sprites. """
         self.player = PlayerCtrl()
         self.level = Level('level_1.tmx', self.player)
 

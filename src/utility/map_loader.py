@@ -7,6 +7,7 @@ import sys
 
 import src.config as cfg
 from src.sprites.tanks.color_tank import ColorTank
+import src.sprites.misc.obstacles as obs
 
 class TiledMapLoader:
     def _load_map(self, filename):
@@ -30,6 +31,8 @@ class TiledMapLoader:
         for tile_object in self.tmxdata.objects:
             if tile_object.name == 'player_start':
                 player.set_tank(ColorTank(tile_object.x, tile_object.y, tile_object.color, groups))
+            if tile_object.name == 'smallTree':
+                obs.Tree(tile_object.x, tile_object.y, groups)
 
     def make_map(self, filename):
         self._load_map(filename)

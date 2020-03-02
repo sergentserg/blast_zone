@@ -10,9 +10,11 @@ class Button(AnimatedSprite):
                         {'start_frame': Button.HOVER_ON, 'num_frames': 1},
                         {'start_frame': Button.CLICKED, 'num_frames': 1}]
         AnimatedSprite.__init__(self, 0, 0, groups, img_files, frame_info)
-        # Add Text to buttons
-        for img in self.images:
-            gtxt.render(img, **text)
+        # Add Text to buttons.
+        for i in range(len(self.images)):
+            # Make a copy to safely alter image with text.
+            self.images[i] = self.images[i].copy()
+            gtxt.render(self.images[i], **text)
         # on-click button function
         self.action = action
 

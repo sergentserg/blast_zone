@@ -3,8 +3,8 @@ vec = pg.math.Vector2
 
 import src.config as cfg
 from src.sprites.spriteW import SpriteW
-from src.sprites.interfaces.movable import MovableNonlinear
-from src.sprites.interfaces.rotatable import Rotatable
+from src.sprites.behaviors.movable import MovableNonlinear
+from src.sprites.behaviors.rotatable import Rotatable
 
 class Tank(SpriteW, MovableNonlinear, Rotatable):
     ACCELERATION = 768
