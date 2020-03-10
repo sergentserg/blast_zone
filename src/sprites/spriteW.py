@@ -13,3 +13,7 @@ class SpriteW(pg.sprite.Sprite):
         self.rect.centery = y
         self.orig_height = self.rect.h
         self.orig_width = self.rect.w
+        self.hit_rect = self.rect
+
+def collide_hit_rect(sprite_a, sprite_b):
+    return sprite_a.hit_rect.colliderect(sprite_b.hit_rect)

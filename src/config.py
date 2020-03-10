@@ -8,8 +8,8 @@ MAP_DIR = path.join(GAME_DIR, 'maps')
 SND_DIR = path.join(GAME_DIR, 'snd')
 
 # Screen Settings
-SCREEN_WIDTH = 960
-SCREEN_HEIGHT = 800
+SCREEN_WIDTH = 840
+SCREEN_HEIGHT = 680
 TITLE = "Blast Zone"
 FPS = 60
 

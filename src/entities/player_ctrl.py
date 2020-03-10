@@ -2,6 +2,7 @@ import pygame as pg
 vec = pg.math.Vector2
 
 # Import to access the keystate enums.
+import src.config as cfg
 from src.input.input_state import InputState
 
 class PlayerCtrl:
@@ -13,6 +14,8 @@ class PlayerCtrl:
                         "reverse": self.reverse,
                         "ccw_turn": self.ccw_turn,
                         "cw_turn": self.cw_turn}
+        # A camera is assigned once the level is created.
+        self.camera = None
 
     def handle_keys(self, active_bindings):
         # Reset acceleration if no press
@@ -24,7 +27,7 @@ class PlayerCtrl:
                 self.actions[name]()
 
     def handle_mouse(self, mouse_state, mouse_x, mouse_y):
-        aim_vec = vec(*pg.mouse.get_pos())
+        aim_vec = vec(mouse_x + self.camera.rect.x, mouse_y + self.camera.rect.y)
         self.tank.rotate_barrel(aim_vec)
 
         if mouse_state == InputState.JUST_PRESSED:

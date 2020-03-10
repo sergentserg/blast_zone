@@ -8,10 +8,12 @@ import sys
 import src.config as cfg
 from src.sprites.tanks.color_tank import ColorTank
 import src.sprites.misc.obstacles as obs
+import src.sprites.items.item as item
 
 class TiledMapLoader:
     def _load_map(self, filename):
-        tm = pytmx.load_pygame(path.join(cfg.MAP_DIR, filename), pixelalpha = True)
+        tm = pytmx.load_pygame(path.join(cfg.MAP_DIR, filename),
+                                pixelalpha = True)
         self.width = tm.width * tm.tilewidth
         self.height = tm.height * tm.tileheight
         self.tmxdata = tm #stores data for later access
@@ -23,16 +25,19 @@ class TiledMapLoader:
                 for x, y, gid, in layer:
                     tile = ti(gid)
                     if tile:
-                        surface.blit(tile, (x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight))
+                        surface.blit(tile, (x * self.tmxdata.tilewidth,
+                                    y * self.tmxdata.tileheight))
         surface = surface.convert_alpha()
         surface.set_colorkey(cfg.BLACK)
 
     def init_sprites(self, groups, player):
-        for tile_object in self.tmxdata.objects:
-            if tile_object.name == 'player_start':
-                player.set_tank(ColorTank(tile_object.x, tile_object.y, tile_object.color, groups))
-            if tile_object.name == 'smallTree':
-                obs.Tree(tile_object.x, tile_object.y, groups)
+        for obj in self.tmxdata.objects:
+            if obj.name == 'player_start':
+                player.set_tank(ColorTank(obj.x, obj.y, obj.color, groups))
+            if obj.name == 'smallTree':
+                obs.Tree(obj.x, obj.y, groups)
+            if obj.name == 'box':
+                item.Item(obj.x, obj.y, groups)
 
     def make_map(self, filename):
         self._load_map(filename)

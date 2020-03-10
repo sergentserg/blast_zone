@@ -17,43 +17,41 @@ class Barrel(SpriteW, Rotatable):
     FIRE_SFX = 'shoot.wav'
     def __init__(self, x, y, type, image, groups, offset = 0):
         self._layer = cfg.BARREL_LAYER
-        SpriteW.__init__(self, x, y, image, groups)
+        SpriteW.__init__(self, x, y, image, (groups['all'],))
         Rotatable.__init__(self)
-        # Get rid of this at some point...
-        self.offset = offset
         self.groups = groups
         self.rect.midtop = (x, y)
         # May group these in a json file for barrels too
         self.type = type
         self.ammo_count = Barrel.__barrel_stats[type]["max_ammo"]
-        self.last_shot = 0
-        # Sound effects for firing/failing to fire
-        self.fire_sfx = sfx_loader.get_sfx(Barrel.FIRE_SFX)
+        self._last_shot = 0
+        self._fire_sfx = sfx_loader.get_sfx(Barrel.FIRE_SFX)
         # self.no_ammo_sfx = None
 
     def update(self, dt):
         pass
 
     def fire(self):
-        if (pg.time.get_ticks() - self.last_shot) > Barrel.__barrel_stats[self.type]["fire_delay"]:
+        if (pg.time.get_ticks() - self._last_shot) > Barrel.__barrel_stats[self.type]["fire_delay"]:
             if self.ammo_count > 0:
-                self.__spawn_bullet()
-                self.fire_sfx.play()
+                self._spawn_bullet()
+                self._fire_sfx.play()
             else:
                 # self.no_ammo_sfx.play()
                 pass
 
-    def __spawn_bullet(self):
-        fire_pos = vec(*self.rect.center) + vec(self.orig_height, 0).rotate(-self.rot)
+    def _spawn_bullet(self):
+        fire_pos = vec(*self.rect.center) + \
+                            vec(self.orig_height, 0).rotate(-self.rot)
         Bullet(*fire_pos, self.rot, self.type, self.color, self.groups)
         MuzzleFlash(*fire_pos, self.rot, self.groups)
         self.ammo_count -= 1
-        self.last_shot = pg.time.get_ticks()
+        self._last_shot = pg.time.get_ticks()
 
     def reload_ammo(self):
         self.ammo_count = Barrel.__barrel_stats[self.type]["max_ammo"]
 
-    # Override: remove reference to parent tank before killing.
+    # Override: remove circular reference to parent tank before killing.
     def kill(self):
         self.parent = None
         super().kill()
@@ -65,10 +63,10 @@ class MuzzleFlash(SpriteW):
     image = 'shotLarge.png'
     def __init__(self, x, y, rot, groups):
         self._layer = cfg.EFFECTS_LAYER
-        SpriteW.__init__(self, x, y, MuzzleFlash.image, groups)
+        SpriteW.__init__(self, x, y, MuzzleFlash.image, groups['all'])
         Rotatable.rotate_image(self, self.image, rot - MuzzleFlash.IMG_ROT)
-        self.spawn_time = pg.time.get_ticks()
+        self._spawn_time = pg.time.get_ticks()
 
     def update(self, dt):
-        if (pg.time.get_ticks() - self.spawn_time) > MuzzleFlash.FLASH_DURATION:
+        if (pg.time.get_ticks() - self._spawn_time) > MuzzleFlash.FLASH_DURATION:
             self.kill()

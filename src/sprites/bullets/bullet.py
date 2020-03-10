@@ -15,9 +15,10 @@ class Bullet(SpriteW, Movable):
     IMAGE_ROT = 90
     def __init__(self, x, y, dir, bullet_type, color, groups):
         img_file = "bullet{0}{1}.png".format(color, Bullet.TYPE.get(bullet_type))
-        SpriteW.__init__(self, x, y, img_file, groups)
+        SpriteW.__init__(self, x, y, img_file, (groups['all'], groups['bullets']))
         Movable.__init__(self, x, y)
         self.__init_bullet(dir, bullet_type)
+        self.walls_grp = groups['obstacles']
 
     def __init_bullet(self, dir, bullet_type):
         self._layer = cfg.ITEM_LAYER
@@ -31,5 +32,5 @@ class Bullet(SpriteW, Movable):
         if (pg.time.get_ticks() - self.spawn_time) > self.stats["lifetime"]:
             self.kill()
         else:
-            self.move(dt)
+            self.move(self.walls_grp, dt)
             # pass
