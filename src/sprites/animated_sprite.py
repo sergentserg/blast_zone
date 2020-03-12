@@ -27,12 +27,14 @@ class AnimatedSprite(SpriteW):
             self.current_frame += floor(self.frame_time * self.anim_fps)
 
             # Check if we reached final frame in animation
-            if self.current_frame >= self.num_frames:
-                self.current_frame = self.current_frame % self.num_frames
-
+            if self.current_frame >= self.frame_info[self.anim_num]["num_frames"]:
+                self._handle_last()
             # Update the active image
             self.image = self.images[self.current_frame]
             self.frame_time = self.frame_time % (1/self.anim_fps)
+
+    def _handle_last():
+        self.current_frame = self.current_frame % self.frame_info[self.anim_num]["num_frames"]
 
     def change_anim(self, num):
         self.anim_num = num

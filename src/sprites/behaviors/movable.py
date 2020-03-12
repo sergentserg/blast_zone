@@ -17,6 +17,7 @@ class Movable:
     def _handle_walls(self, displacement, walls_grp):
         self.pos += displacement
         self.rect.center = self.pos
+        self.hit_rect.center = self.pos
 
 
 class MovableNonlinear(Movable):

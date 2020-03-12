@@ -29,6 +29,8 @@ class Item(SpriteW):
         pct = min_pct + random() * (max_pct - min_pct)
         self.item_sfx['heal'].play()
         tank.health += tank.MAX_HEALTH * pct
+        if tank.health > 100:
+            tank.health = 100
 
     def _reload(self, tank):
         self.item_sfx['ammo'].play()

@@ -7,4 +7,6 @@ class ColorTank(Tank):
         img_file = f"tankBody_{color}_outline.png"
         Tank.__init__(self, x, y, img_file, groups)
         self.barrel  = ColorBarrel(x, y, color.capitalize(), "standard", groups)
+        self.id = id(self)
+        self.barrel.id = self.id
         # self.barrel  = ColorBarrel(x, y + int(self.rect.h/3) , color.capitalize(), "standard", groups)

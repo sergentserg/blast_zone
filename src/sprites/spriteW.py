@@ -11,9 +11,14 @@ class SpriteW(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
-        self.orig_height = self.rect.h
-        self.orig_width = self.rect.w
         self.hit_rect = self.rect
+        # Default id used in collision with bullets.
+        self.id = -1
 
 def collide_hit_rect(sprite_a, sprite_b):
     return sprite_a.hit_rect.colliderect(sprite_b.hit_rect)
+
+def bullet_collide_id(sprite_a, sprite_b):
+    # print(sprite_a.id != sprite_b.id)
+    return sprite_a.hit_rect.colliderect(sprite_b.hit_rect) and \
+            sprite_a.id != sprite_b.id

@@ -20,9 +20,10 @@ class Barrel(SpriteW, Rotatable):
         SpriteW.__init__(self, x, y, image, (groups['all'],))
         Rotatable.__init__(self)
         self.groups = groups
-        self.rect.midtop = (x, y)
         # May group these in a json file for barrels too
         self.type = type
+        # Default color
+        self.color = 'Dark'
         self.ammo_count = Barrel.__barrel_stats[type]["max_ammo"]
         self._last_shot = 0
         self._fire_sfx = sfx_loader.get_sfx(Barrel.FIRE_SFX)
@@ -42,8 +43,8 @@ class Barrel(SpriteW, Rotatable):
 
     def _spawn_bullet(self):
         fire_pos = vec(*self.rect.center) + \
-                            vec(self.orig_height, 0).rotate(-self.rot)
-        Bullet(*fire_pos, self.rot, self.type, self.color, self.groups)
+                            vec(self.hit_rect.height, 0).rotate(-self.rot)
+        Bullet(*fire_pos, self.rot, self.type, self.color, self.id, self.groups)
         MuzzleFlash(*fire_pos, self.rot, self.groups)
         self.ammo_count -= 1
         self._last_shot = pg.time.get_ticks()

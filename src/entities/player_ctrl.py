@@ -14,8 +14,9 @@ class PlayerCtrl:
                         "reverse": self.reverse,
                         "ccw_turn": self.ccw_turn,
                         "cw_turn": self.cw_turn}
-        # A camera is assigned once the level is created.
+        # A camera and tank are assigned once the level is created.
         self.camera = None
+        self.tank = None
 
     def handle_keys(self, active_bindings):
         # Reset acceleration if no press

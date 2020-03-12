@@ -89,6 +89,27 @@ class Tank(SpriteW, MovableNonlinear, Rotatable):
     def set_barrel(self, barrel):
         pass
 
+    def draw_health(self, surface, camera):
+        pct = self.health / Tank.MAX_HEALTH
+        color = cfg.WHITE
+        if pct > 0.7:
+            color = cfg.GREEN
+        elif pct > 0.3:
+            color = cfg.YELLOW
+        elif pct >= 0:
+            color = cfg.RED
+
+        bar_width = self.hit_rect.width
+        bar_height = self.hit_rect.height // 3
+
+        fill_rect = pg.Rect(self.hit_rect.x, self.hit_rect.y,
+                                    bar_width * pct, bar_height)
+        outline_rect = pg.Rect(self.hit_rect.x, self.hit_rect.y,
+                                            bar_width, bar_height)
+
+        pg.draw.rect(surface, color, camera.apply(fill_rect))
+        pg.draw.rect(surface, cfg.WHITE, camera.apply(outline_rect), 2)
+
     def _spawn_tracks(self):
         Tracks(*self.pos, self.hit_rect.height, self.hit_rect.height,
                                                     self.rot, self.groups)

@@ -13,17 +13,19 @@ class Bullet(SpriteW, Movable):
 
     TYPE = {"standard": 1, "power": 2, "rapid": 3}
     IMAGE_ROT = 90
-    def __init__(self, x, y, dir, bullet_type, color, groups):
+    def __init__(self, x, y, dir, bullet_type, color, id, groups):
         img_file = "bullet{0}{1}.png".format(color, Bullet.TYPE.get(bullet_type))
         SpriteW.__init__(self, x, y, img_file, (groups['all'], groups['bullets']))
         Movable.__init__(self, x, y)
         self.__init_bullet(dir, bullet_type)
         self.walls_grp = groups['obstacles']
+        self.id = id
 
     def __init_bullet(self, dir, bullet_type):
         self._layer = cfg.ITEM_LAYER
         # Bullets images are rotated 90 deg by default
         Rotatable.rotate_image(self, self.image, dir - Bullet.IMAGE_ROT)
+        self.hit_rect = self.rect
         self.stats = Bullet.__bullet_stats[bullet_type]
         self.vel = vec(self.stats["speed"], 0).rotate(-dir)
         self.spawn_time = pg.time.get_ticks()
