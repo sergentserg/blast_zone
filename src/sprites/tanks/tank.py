@@ -20,19 +20,18 @@ class Tank(SpriteW, MovableNonlinear, Rotatable):
         MovableNonlinear.__init__(self, x, y)
         Rotatable.__init__(self)
         self.groups = groups
-        self.barrel = None
-        self.barrel_offset = int(self.hit_rect.height/3)
+        self.barrels = []
         self.health = Tank.MAX_HEALTH
         self.hit_rect.center = self.pos
         # Time last track was spawned.
-        self.last_track = 0
+        self._last_track = 0
 
     def update(self, dt):
         # Call move? Should move check for collisions/out of bounds?
         self.rotate(dt)
         self.move(self.groups['obstacles'], dt)
         if self.vel.length_squared() > Tank._SPEED_CUTOFF and (
-                    pg.time.get_ticks() - self.last_track) > Tank._TRACK_DELAY:
+                    pg.time.get_ticks() - self._last_track) > Tank._TRACK_DELAY:
             self._spawn_tracks()
 
     def _handle_walls(self, displacement, walls_grp):
@@ -67,27 +66,25 @@ class Tank(SpriteW, MovableNonlinear, Rotatable):
             self.hit_rect.centery = self.pos.y
         self.rect.center = self.pos
 
-    def rotate_barrel(self, aim_vec):
-        pointing = aim_vec - vec(*self.rect.center)
-        dir = pointing.angle_to(vec(1, 0))
-        self.barrel.rect.center = vec(*self.rect.center) + \
-                                    vec(self.barrel_offset, 0).rotate(-dir)
-        self.barrel.rot = dir
-        self.barrel.rotate()
+    def rotate_barrel(self, dir):
+        # dir is a real number corresponding to the angle the barrel will face.
+        for barrel in self.barrels:
+            barrel.rot = dir
+            barrel.rotate()
 
     def fire(self):
-        self.barrel.fire()
+        for barrel in self.barrels:
+            barrel.fire()
 
     def reload(self):
-        self.barrel.reload_ammo()
+        for barrel in self.barrels:
+            barrel.reload_ammo()
 
     # Override kill to call barrel's kill?
     def kill(self):
-        self.barrel.kill()
+        for barrel in self.barrels:
+            barrel.kill()
         super().kill()
-
-    def set_barrel(self, barrel):
-        pass
 
     def draw_health(self, surface, camera):
         pct = self.health / Tank.MAX_HEALTH
@@ -113,7 +110,7 @@ class Tank(SpriteW, MovableNonlinear, Rotatable):
     def _spawn_tracks(self):
         Tracks(*self.pos, self.hit_rect.height, self.hit_rect.height,
                                                     self.rot, self.groups)
-        self.last_track = pg.time.get_ticks()
+        self._last_track = pg.time.get_ticks()
 
 
 class Tracks(SpriteW):

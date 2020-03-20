@@ -29,7 +29,9 @@ class PlayerCtrl:
 
     def handle_mouse(self, mouse_state, mouse_x, mouse_y):
         aim_vec = vec(mouse_x + self.camera.rect.x, mouse_y + self.camera.rect.y)
-        self.tank.rotate_barrel(aim_vec)
+        pointing = aim_vec - self.tank.pos
+        dir = pointing.angle_to(vec(1, 0))
+        self.tank.rotate_barrel(dir)
 
         if mouse_state == InputState.JUST_PRESSED:
             self.fire()

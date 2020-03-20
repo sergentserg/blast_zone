@@ -17,10 +17,10 @@ class Level:
                         'bullets': pg.sprite.Group(),
                         'obstacles': pg.sprite.Group(),
                         'items': pg.sprite.Group()}
-        self.turrets = []
-        map_loader.init_sprites(self.groups, player, self.turrets)
-        for turret in self.turrets:
-            turret.target = player.tank
+        self.ai_mobs = []
+        map_loader.init_sprites(self.groups, player, self.ai_mobs)
+        for ai in self.ai_mobs:
+            ai.target = player.tank
 
         self.camera = Camera(player, self.rect.width, self.rect.height)
         player.camera = self.camera
@@ -36,8 +36,8 @@ class Level:
 
     def update(self, dt):
         self.groups['all'].update(dt)
-        for turret in self.turrets:
-            turret.update(dt)
+        for ai in self.ai_mobs:
+            ai.update(dt)
         self.camera.update()
 
         # Bullet hits obstacle.

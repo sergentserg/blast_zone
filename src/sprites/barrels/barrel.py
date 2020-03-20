@@ -15,22 +15,28 @@ class Barrel(SpriteW, Rotatable):
     __barrel_stats = load_stats_data(path.join(path.dirname(__file__), 'barrel_stats.json'))
     TYPES = {"standard": 1, "power": 2, "rapid": 3}
     FIRE_SFX = 'shoot.wav'
-    def __init__(self, x, y, type, image, groups, offset = 0):
+    def __init__(self, parent, offset, image, groups, type="standard"):
         self._layer = cfg.BARREL_LAYER
-        SpriteW.__init__(self, x, y, image, (groups['all'],))
+        SpriteW.__init__(self, *parent.rect.center, image, (groups['all'],))
         Rotatable.__init__(self)
         self.groups = groups
-        # May group these in a json file for barrels too
+
+        # Parameters used for position.
+        self.parent = parent
+        self.offset = offset
+
+        # Bullet parameters.
         self.type = type
-        # Default color
         self.color = 'Dark'
-        self.ammo_count = Barrel.__barrel_stats[type]["max_ammo"]
+        self.ammo_count = Barrel.__barrel_stats[self.type]["max_ammo"]
+
         self._last_shot = 0
         self._fire_sfx = sfx_loader.get_sfx(Barrel.FIRE_SFX)
         # self.no_ammo_sfx = None
 
     def update(self, dt):
-        pass
+        self.rect.center = vec(*self.parent.rect.center) + \
+                                    vec(self.offset, 0).rotate(-self.rot)
 
     def fire(self):
         if (pg.time.get_ticks() - self._last_shot) > Barrel.__barrel_stats[self.type]["fire_delay"]:

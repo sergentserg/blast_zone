@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="24" height="16" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="32">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="24" height="16" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="32">
  <tileset firstgid="1" name="rural_terrain_Kenney" tilewidth="64" tileheight="64" tilecount="40" columns="10">
   <image source="terrainTiles_default.png" width="640" height="256"/>
  </tileset>
@@ -459,16 +459,16 @@
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,166,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,217,217,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,217,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,160,0,0,0,0,0,0,0,0,0,0,86,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,120,0,0,0,0,0,0,0,0,0,0,0,0,0,0,166,0,0,0,0,
+0,0,0,0,120,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,163,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,166,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,217,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -502,15 +502,10 @@
   <object id="6" name="smallTree" x="1040" y="304"/>
   <object id="7" name="smallTree" x="1104" y="304"/>
   <object id="8" name="enemyHeavy" x="1281" y="563" width="60" height="72"/>
-  <object id="12" name="enemyHeavy" x="1281" y="563" width="60" height="72">
+  <object id="12" name="enemyTank" x="1281" y="563" width="60" height="72">
    <properties>
+    <property name="color" value="blue"/>
     <property name="img" value="tank_huge.png"/>
-   </properties>
-  </object>
-  <object id="13" name="color_barrel" type="barrel" x="128" y="172" width="17" height="16">
-   <properties>
-    <property name="barrel_type" value="rapid"/>
-    <property name="color" value="Blue"/>
    </properties>
   </object>
   <object id="23" name="player_start" x="62" y="467" width="43" height="37">

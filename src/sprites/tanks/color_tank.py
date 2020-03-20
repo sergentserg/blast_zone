@@ -2,11 +2,11 @@ from src.sprites.tanks.tank import Tank
 from src.sprites.barrels.color_barrel import ColorBarrel
 
 class ColorTank(Tank):
-    BLUE, DARK, GREEN, SAND, RED =  "blue", "dark", "green", "sand", "red"
     def __init__(self, x, y, color, groups):
         img_file = f"tankBody_{color}_outline.png"
         Tank.__init__(self, x, y, img_file, groups)
-        self.barrel  = ColorBarrel(x, y, color.capitalize(), "standard", groups)
+        offset = int(self.hit_rect.height/3)
+        self.barrels.append(ColorBarrel(self, offset, color.capitalize(), groups))
         self.id = id(self)
-        self.barrel.id = self.id
-        # self.barrel  = ColorBarrel(x, y + int(self.rect.h/3) , color.capitalize(), "standard", groups)
+        for barrel in self.barrels:
+            barrel.id = self.id
