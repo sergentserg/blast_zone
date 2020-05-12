@@ -1,20 +1,22 @@
-import json
+import math
 from os import path
 import pygame as pg
 
 import src.config as cfg
-from src.sprites.spriteW import SpriteW
 import src.utility.sound_loader as sfx_loader
+from src.utility.stats_loader import load_stats_data
+from src.sprites.spriteW import SpriteW
 from src.sprites.behaviors.rotatable import Rotatable
 from src.sprites.bullets.bullet import Bullet
-from src.utility.stats_loader import load_stats_data
 
 vec = pg.math.Vector2
 
+
 class Barrel(SpriteW, Rotatable):
-    __barrel_stats = load_stats_data(path.join(path.dirname(__file__), 'barrel_stats.json'))
+    _STATS = load_stats_data(path.join(path.dirname(__file__), 'barrel_stats.json'))
     TYPES = {"standard": 1, "power": 2, "rapid": 3}
     FIRE_SFX = 'shoot.wav'
+    RELOAD_TIMER = 10000
     def __init__(self, parent, offset, image, groups, type="standard"):
         self._layer = cfg.BARREL_LAYER
         SpriteW.__init__(self, *parent.rect.center, image, (groups['all'],))
@@ -28,9 +30,9 @@ class Barrel(SpriteW, Rotatable):
         # Bullet parameters.
         self.type = type
         self.color = 'Dark'
-        self.ammo_count = Barrel.__barrel_stats[self.type]["max_ammo"]
+        self.ammo_count = Barrel._STATS[self.type]["max_ammo"]
 
-        self._last_shot = 0
+        self._last_shot = -math.inf
         self._fire_sfx = sfx_loader.get_sfx(Barrel.FIRE_SFX)
         # self.no_ammo_sfx = None
 
@@ -39,13 +41,18 @@ class Barrel(SpriteW, Rotatable):
                                     vec(self.offset, 0).rotate(-self.rot)
 
     def fire(self):
-        if (pg.time.get_ticks() - self._last_shot) > Barrel.__barrel_stats[self.type]["fire_delay"]:
-            if self.ammo_count > 0:
+        if cfg.time_since(self._last_shot) > Barrel._STATS[self.type]["fire_delay"]:
+            if self.has_ammo():
+                self._last_shot = pg.time.get_ticks()
                 self._spawn_bullet()
                 self._fire_sfx.play()
             else:
-                # self.no_ammo_sfx.play()
-                pass
+                if cfg.time_since(self._last_shot) > Barrel.RELOAD_TIMER:
+                    self.reload()
+                    print("reload!")
+                else:
+                    # self.no_ammo_sfx.play()
+                    pass
 
     def _spawn_bullet(self):
         fire_pos = vec(*self.rect.center) + \
@@ -53,12 +60,14 @@ class Barrel(SpriteW, Rotatable):
         Bullet(*fire_pos, self.rot, self.type, self.color, self.id, self.groups)
         MuzzleFlash(*fire_pos, self.rot, self.groups)
         self.ammo_count -= 1
-        self._last_shot = pg.time.get_ticks()
 
-    def reload_ammo(self):
-        self.ammo_count = Barrel.__barrel_stats[self.type]["max_ammo"]
+    def has_ammo(self):
+        return self.ammo_count > 0
 
-    # Override: remove circular reference to parent tank before killing.
+    def reload(self):
+        self.ammo_count = Barrel._STATS[self.type]["max_ammo"]
+
+    # @Override, remove circular reference?
     def kill(self):
         self.parent = None
         super().kill()
@@ -75,5 +84,5 @@ class MuzzleFlash(SpriteW):
         self._spawn_time = pg.time.get_ticks()
 
     def update(self, dt):
-        if (pg.time.get_ticks() - self._spawn_time) > MuzzleFlash.FLASH_DURATION:
+        if cfg.time_since(self._spawn_time) > MuzzleFlash.FLASH_DURATION:
             self.kill()

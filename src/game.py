@@ -5,7 +5,13 @@ from src.game_state import GameNotPlayingState
 from src.ui.game_ui import GameUI
 from src.input.input_manager import InputManager
 
+
 class Game:
+    """ The Game class effects the game loop, using state classes to determine its
+        behavior.
+
+    """
+
     def __init__(self):
         """ Initializes resources such as the screen, clock, InputManager, UI,
         initialbehavior state, and flags.
@@ -13,7 +19,8 @@ class Game:
         """
         self.screen = pg.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
         pg.display.set_caption(cfg.TITLE)
-        self.clock = pg.time.Clock()
+
+        self._clock = pg.time.Clock()
 
         self.input_manager = InputManager(self)
         self.ui = GameUI(self)
@@ -37,7 +44,7 @@ class Game:
         and draws.
 
         """
-        self.dt = self.clock.tick(cfg.FPS) / 1000
+        self.dt = self._clock.tick(cfg.FPS) / 1000
         self._process_events()
         self._update(self.dt)
         self._draw()
@@ -59,13 +66,9 @@ class Game:
 
     def _draw(self):
         # Clears screen and redraws all sprites depending on the state.
-        # Clear the screen.
         self.screen.fill(cfg.BLACK)
-
-        # Draw all sprites.
         self.state.draw()
-
-        title = f"{cfg.TITLE} FPS: {int(self.clock.get_fps())}"
+        title = f"{cfg.TITLE} FPS: {int(self._clock.get_fps())}"
         pg.display.set_caption(title)
         pg.display.flip()
 

@@ -1,8 +1,9 @@
-from os import path
+import os
 import xml.etree.ElementTree as ET
 import pygame as pg
 
 import src.config as cfg
+
 
 class ImageLoader:
     def __init__(self, *spritesheets):
@@ -15,10 +16,18 @@ class ImageLoader:
         self._spritesheets_data = []
         self._loaded_surfaces = {}
         for sheet in spritesheets:
-            sheet_paths = {f_type: path.join(cfg.IMG_DIR, fn) for f_type, fn in sheet.items()}
+            sheet_paths = {f_type: os.path.join(cfg.IMG_DIR, fn) for f_type, fn in sheet.items()}
             sheet_surface = pg.image.load(sheet_paths["spritesheet"]).convert_alpha()
             tree = ET.parse(sheet_paths["xml"])
             self._spritesheets_data.append({"surface": sheet_surface, "root": tree.getroot()})
+
+        for file in os.listdir(cfg.EXTRA_IMG_DIR):
+            file_path = os.path.join(cfg.EXTRA_IMG_DIR,file)
+            self._loaded_surfaces[file] = pg.image.load(file_path).convert_alpha()
+            # image = pg.Surface((rect[2], rect[3]))
+            # image.blit(sheet_data["surface"], (0, 0), rect)
+            # return image
+
 
     def get_image(self, fn):
         """ Returns image from preloads; creates it if DNE """

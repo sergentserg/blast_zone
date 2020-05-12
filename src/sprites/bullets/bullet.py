@@ -34,5 +34,5 @@ class Bullet(SpriteW, Movable):
         if (pg.time.get_ticks() - self.spawn_time) > self.stats["lifetime"]:
             self.kill()
         else:
-            self.move(self.walls_grp, dt)
+            self.move(dt)
             # pass

@@ -7,7 +7,7 @@ import sys
 
 import src.config as cfg
 from src.sprites.tanks.color_tank import ColorTank
-import src.sprites.misc.obstacles as obs
+import src.sprites.misc.obstacles as obstacles
 import src.sprites.items.item as item
 from src.entities.turret_ctrl import TurretCtrl
 from src.entities.tank_ctrl import AITankCtrl
@@ -33,19 +33,31 @@ class TiledMapLoader:
         surface.set_colorkey(cfg.BLACK)
 
     def init_sprites(self, groups, player, ai_mobs):
+        ai_path_data = []
+        ai_turret_data = []
         for obj in self.tmxdata.objects:
             if obj.name == 'player_start':
                 player.set_tank(ColorTank(obj.x, obj.y, obj.color, groups))
             if obj.name == 'smallTree':
-                obs.Tree(obj.x, obj.y, groups)
+                obstacles.Tree(obj.x, obj.y, groups)
+            if obj.name == 'AIPatrolPoint':
+                ai_path_data.append(obj)
             if obj.name == 'box':
-                item.Item(obj.x, obj.y, groups)
+                item.spawn_box(obj.x, obj.y, groups)
             if obj.name == 'turret':
-                turret = TurretCtrl(obj.x, obj.y, obj.type, obj.style, groups)
-                ai_mobs.append(turret)
+                ai_turret_data.append(obj)
             if obj.name == 'enemyTank':
-                tank_ai = AITankCtrl(obj.x, obj.y, obj.color, groups)
-                ai_mobs.append(tank_ai)
+                ai_tank = obj
+        # Spawn player tank.
+
+        # Spawn enemy AI tank and provide path information.
+        ai_path_data.sort(key=lambda point: point.path_index)
+        ai_mobs.append(AITankCtrl(ai_tank.x, ai_tank.y, player.tank, ai_path_data, ai_tank.color, groups))
+
+        # Spawn all turrets.
+        for t in ai_turret_data:
+            ai_mobs.append(TurretCtrl(t.x, t.y, player.tank, t.type, t.style, groups))
+
 
     def make_map(self, filename):
         self._load_map(filename)

@@ -14,9 +14,9 @@ class BoundaryWall(pg.sprite.Sprite):
         self.id = -1
 
 class Tree(SpriteW):
-    image = 'treeGreen_small.png'
+    _IMAGE = 'treeGreen_small.png'
     def __init__(self, x, y, groups):
-        SpriteW.__init__(self, x, y, Tree.image,
+        SpriteW.__init__(self, x, y, Tree._IMAGE,
                         (groups['all'], groups['obstacles']))
         self._layer = cfg.ITEM_LAYER
 

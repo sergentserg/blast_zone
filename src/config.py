@@ -1,9 +1,14 @@
 import pygame as pg
 from os import path
 
+
+def time_since(t0):
+    return pg.time.get_ticks() - t0
+
 # src directory
 GAME_DIR = path.dirname(__file__)
 IMG_DIR = path.join(GAME_DIR, 'img')
+EXTRA_IMG_DIR = path.join(IMG_DIR, 'other_images')
 MAP_DIR = path.join(GAME_DIR, 'maps')
 SND_DIR = path.join(GAME_DIR, 'snd')
 
@@ -36,3 +41,7 @@ BARREL_LAYER = 4
 ITEM_LAYER = 3
 TANK_LAYER = 2
 TRACKS_LAYER = 1
+
+# Other constants.
+Vec2 = pg.math.Vector2
+UNIT_VEC = Vec2(1, 0)

@@ -11,7 +11,7 @@ class GameNotPlayingState:
 
     def enter(self):
         """ Creates splash surface, as well as the main menu object from UI. """
-        splash_path = path.join(cfg.IMG_DIR, "Sample.png")
+        splash_path = path.join(cfg.EXTRA_IMG_DIR, "Sample.png")
         self.splash_img = pg.image.load(splash_path).convert_alpha()
 
         dimensions = (cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT)

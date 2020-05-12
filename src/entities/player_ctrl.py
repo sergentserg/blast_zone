@@ -6,6 +6,7 @@ import src.config as cfg
 from src.input.input_state import InputState
 
 class PlayerCtrl:
+    ROT_SPEED = 75
     # def __init__(self, tank)
     def __init__(self):
         # Load bindings from json file
@@ -37,7 +38,8 @@ class PlayerCtrl:
             self.fire()
 
     def fire(self):
-        self.tank.fire()
+        if self.tank.alive():
+            self.tank.fire()
 
     def forward(self):
         self.tank.acc = vec(self.tank.ACCELERATION, 0).rotate(-self.tank.rot)
@@ -46,10 +48,14 @@ class PlayerCtrl:
         self.tank.acc = vec(-self.tank.ACCELERATION, 0).rotate(-self.tank.rot)
 
     def ccw_turn(self):
-        self.tank.rot_speed = self.tank.ROT_SPEED
+        self.tank.rot_speed = self.ROT_SPEED
 
     def cw_turn(self):
-        self.tank.rot_speed = -self.tank.ROT_SPEED
+        self.tank.rot_speed = -self.ROT_SPEED
 
     def set_tank(self, tank):
         self.tank = tank
+
+    def draw_health(surface, camera):
+        pass
+        # Draw at top left of the screen.

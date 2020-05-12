@@ -11,6 +11,7 @@ class SpriteW(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
+        # self.rect might be transformed, so hit_rect will retain original dimensions.
         self.hit_rect = self.rect
         # Default id used in collision with bullets.
         self.id = -1
