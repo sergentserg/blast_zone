@@ -5,8 +5,8 @@ import src.config as cfg
 
 class SoundLoader:
     def __init__(self):
-        self.music = {}
-        self.sfx = {}
+        self._music = {}
+        self._sfx = {}
         # Load all sounds
         for file in os.listdir(cfg.SND_DIR):
             if file.endswith(".wav"):
@@ -14,13 +14,13 @@ class SoundLoader:
                 self._load_sound(filepath)
 
     def _load_sound(self, filepath):
-        self.sfx[filepath] = pg.mixer.Sound(filepath)
+        self._sfx[filepath] = pg.mixer.Sound(filepath)
 
     def get_sfx(self, filename):
         filepath = os.path.join(cfg.SND_DIR, filename)
-        if not self.sfx[filepath]:
+        if not self._sfx[filepath]:
             self._load_sound(filepath)
-        return self.sfx[filepath]
+        return self._sfx[filepath]
 
 _sound_loader = SoundLoader()
 get_sfx = _sound_loader.get_sfx

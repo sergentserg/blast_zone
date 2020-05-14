@@ -13,29 +13,35 @@ from src.entities.turret_ctrl import TurretCtrl
 from src.entities.tank_ctrl import AITankCtrl
 
 class TiledMapLoader:
+    def make_map(self, filename):
+        self._load_map(filename)
+        temp_surface = pg.Surface((self._width, self._height))
+        self._render(temp_surface)
+        return temp_surface
+        
     def _load_map(self, filename):
         tm = pytmx.load_pygame(path.join(cfg.MAP_DIR, filename),
                                 pixelalpha = True)
-        self.width = tm.width * tm.tilewidth
-        self.height = tm.height * tm.tileheight
-        self.tmxdata = tm #stores data for later access
+        self._width = tm.width * tm.tilewidth
+        self._height = tm.height * tm.tileheight
+        self._tmxdata = tm #stores data for later access
 
     def _render(self, surface):
-        ti = self.tmxdata.get_tile_image_by_gid
-        for layer in self.tmxdata.visible_layers:
+        ti = self._tmxdata.get_tile_image_by_gid
+        for layer in self._tmxdata.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid, in layer:
                     tile = ti(gid)
                     if tile:
-                        surface.blit(tile, (x * self.tmxdata.tilewidth,
-                                    y * self.tmxdata.tileheight))
+                        surface.blit(tile, (x * self._tmxdata.tilewidth,
+                                    y * self._tmxdata.tileheight))
         surface = surface.convert_alpha()
         surface.set_colorkey(cfg.BLACK)
 
     def init_sprites(self, groups, player, ai_mobs):
         ai_path_data = []
         ai_turret_data = []
-        for obj in self.tmxdata.objects:
+        for obj in self._tmxdata.objects:
             if obj.name == 'player_start':
                 player.set_tank(ColorTank(obj.x, obj.y, obj.color, groups))
             if obj.name == 'smallTree':
@@ -57,13 +63,6 @@ class TiledMapLoader:
         # Spawn all turrets.
         for t in ai_turret_data:
             ai_mobs.append(TurretCtrl(t.x, t.y, player.tank, t.type, t.style, groups))
-
-
-    def make_map(self, filename):
-        self._load_map(filename)
-        temp_surface = pg.Surface((self.width, self.height))
-        self._render(temp_surface)
-        return temp_surface
 
 _map_loader = TiledMapLoader()
 

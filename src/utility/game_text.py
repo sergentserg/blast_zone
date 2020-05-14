@@ -6,11 +6,11 @@ import src.config as cfg
 class TextRenderer:
     def __init__(self):
         # Load all fonts
-        self.fonts = {font: pg.font.match_font(font) for font in cfg.FONT_NAMES}
+        self._fonts = {font: pg.font.match_font(font) for font in cfg.FONT_NAMES}
 
     def _render_text_surface(self, text, size, color, font_name = 'arial'):
         # Create font object
-        font_object = pg.font.Font(self.fonts[font_name], size)
+        font_object = pg.font.Font(self._fonts[font_name], size)
 
         # Create a text surface
         text_surface = font_object.render(text, True, color)

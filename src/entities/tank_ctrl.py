@@ -14,7 +14,11 @@ class AITankCtrl:
         self._target = target
         self._path_points = cycle([cfg.Vec2(p.x, p.y) for p in path_data])
         self._ray_to_target = None
-        self._state = AIPatrolState(self, self.tank.pos)
+        self._state = AIPatrolState(self)
+
+    @property
+    def pos(self):
+        return self.tank.pos
 
     def update(self, dt):
         if self._target.alive():
@@ -22,10 +26,7 @@ class AITankCtrl:
         self._state.update(dt)
 
     def set_state(self, state):
-        if state == AIPatrolState:
-            self._state = AIPatrolState(self, self.tank.pos)
-        else:
-            self._state = state(self)
+        self._state = state(self)
 
     def turn_towards(self, point=None):
         if point:
@@ -87,11 +88,10 @@ class AITankState:
 
 class AIPatrolState(AITankState):
     EPSILON = 100
-    def __init__(self, ai, tank_pos):
+    def __init__(self, ai):
         AITankState.__init__(self, ai)
         self._destination = self._ai.get_next_destination()
         self._ai.turn_towards(self._destination)
-        self._ai_pos = tank_pos
 
     def update(self, dt):
         self.check_for_walls()
@@ -105,7 +105,7 @@ class AIPatrolState(AITankState):
         self._ai.move(pct=0.5)
 
     def arrived(self):
-        dist = (self._destination - self._ai_pos).length_squared()
+        dist = (self._destination - self._ai.pos).length_squared()
         return dist < AIPatrolState.EPSILON
 
 

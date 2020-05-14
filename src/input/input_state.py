@@ -4,16 +4,16 @@ class InputState:
     STILL_RELEASED, JUST_PRESSED, STILL_PRESSED, JUST_RELEASED = 0, 1, 2, 3
     def __init__(self):
         # Keyboard state boolean list.
-        self.current_keys = pg.key.get_pressed()
-        self.prev_keys = None
+        self._current_keys = pg.key.get_pressed()
+        self._prev_keys = None
 
         # Mouse state boolean list.
         self.current_mouse = pg.mouse.get_pressed()
         self.prev_mouse = None
 
     def update(self):
-        self.prev_keys = self.current_keys
-        self.current_keys = pg.key.get_pressed()
+        self._prev_keys = self._current_keys
+        self._current_keys = pg.key.get_pressed()
 
         self.prev_mouse = self.current_mouse
         self.current_mouse = pg.mouse.get_pressed()
@@ -32,7 +32,7 @@ class InputState:
                 return InputState.STILL_RELEASED
 
     def get_keystate(self, keycode):
-        return self._get_state(self.prev_keys, self.current_keys, keycode)
+        return self._get_state(self._prev_keys, self._current_keys, keycode)
 
     def get_mousestate(self, button):
         return self._get_state(self.prev_mouse, self.current_mouse, button)

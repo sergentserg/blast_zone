@@ -1,5 +1,4 @@
 import pygame as pg
-vec = pg.math.Vector2
 
 # Import to access the keystate enums.
 import src.config as cfg
@@ -33,16 +32,16 @@ class PlayerCtrl:
     def handle_keys(self, active_bindings):
         # Reset acceleration if no press
         self.tank.rot_speed = 0
-        self.tank.acc = vec(0, 0)
+        self.tank.acc = cfg.Vec2(0, 0)
         for name in active_bindings:
             # i.e. self.actions["fire"]
             if self.actions.get(name, None):
                 self.actions[name]()
 
     def handle_mouse(self, mouse_state, mouse_x, mouse_y):
-        aim_vec = vec(mouse_x + self.camera.rect.x, mouse_y + self.camera.rect.y)
+        aim_vec = cfg.Vec2(mouse_x + self.camera.rect.x, mouse_y + self.camera.rect.y)
         pointing = aim_vec - self.tank.pos
-        dir = pointing.angle_to(vec(1, 0))
+        dir = pointing.angle_to(cfg.Vec2(1, 0))
         self.tank.rotate_barrel(dir)
 
         if mouse_state == InputState.JUST_PRESSED:
@@ -53,10 +52,10 @@ class PlayerCtrl:
             self.tank.fire()
 
     def forward(self):
-        self.tank.acc = vec(self.tank.ACCELERATION, 0).rotate(-self.tank.rot)
+        self.tank.acc = cfg.Vec2(self.tank.ACCELERATION, 0).rotate(-self.tank.rot)
 
     def reverse(self):
-        self.tank.acc = vec(-self.tank.ACCELERATION, 0).rotate(-self.tank.rot)
+        self.tank.acc = cfg.Vec2(-self.tank.ACCELERATION, 0).rotate(-self.tank.rot)
 
     def ccw_turn(self):
         self.tank.rot_speed = _ROT_SPEED
