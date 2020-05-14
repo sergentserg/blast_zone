@@ -6,8 +6,6 @@ from itertools import cycle
 import src.config as cfg
 from src.sprites.tanks.color_tank import ColorTank
 
-vec = pg.math.Vector2
-
 
 class AITankCtrl:
     DETECT_RADIUS = (cfg.SCREEN_WIDTH ** 2 + cfg.SCREEN_WIDTH ** 2) / 8

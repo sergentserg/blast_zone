@@ -64,6 +64,9 @@ class Barrel(SpriteW, Rotatable):
     def has_ammo(self):
         return self.ammo_count > 0
 
+    def get_ammo_count(self):
+        return self.ammo_count
+
     def reload(self):
         self.ammo_count = Barrel._STATS[self.type]["max_ammo"]
 

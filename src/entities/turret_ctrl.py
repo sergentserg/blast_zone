@@ -48,8 +48,7 @@ class AIAttackState:
         else:
             separation_vec = self.ai.target_sep()
             if separation_vec.length_squared() < self.ai.DETECT_RADIUS:
-                pass
-                # self.ai.fire(separation_vec)
+                self.ai.fire(separation_vec)
             else:
                 self.ai.set_state(AILazyState(self.ai))
 

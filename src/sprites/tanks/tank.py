@@ -44,6 +44,9 @@ class Tank(SpriteW, MovableNonlinear, Rotatable, Damageable):
             barrel.rot = dir
             barrel.rotate()
 
+    def get_ammo_count(self):
+        return self.barrels[0].get_ammo_count()
+
     def has_ammo(self):
         return self.barrels[0].has_ammo()
 

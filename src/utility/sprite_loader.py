@@ -23,7 +23,10 @@ class ImageLoader:
 
         for file in os.listdir(cfg.EXTRA_IMG_DIR):
             file_path = os.path.join(cfg.EXTRA_IMG_DIR,file)
-            self._loaded_surfaces[file] = pg.image.load(file_path).convert_alpha()
+            surface = pg.image.load(file_path).convert_alpha()
+            surface.set_colorkey(cfg.BLACK)
+            self._loaded_surfaces[file] = surface
+
             # image = pg.Surface((rect[2], rect[3]))
             # image.blit(sheet_data["surface"], (0, 0), rect)
             # return image
@@ -42,6 +45,7 @@ class ImageLoader:
                     data = node.attrib
                     rect = (int(data['x']), int(data['y']), int(data['width']), int(data['height']))
                     image = pg.Surface((rect[2], rect[3]))
+                    image.set_colorkey(cfg.BLACK)
                     image.blit(sheet_data["surface"], (0, 0), rect)
                     return image
 

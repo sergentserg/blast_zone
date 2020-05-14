@@ -16,6 +16,7 @@ class Level:
     MAX_ITEMS = 1
     ITEM_RESPAWN_TIME = 5000
     def __init__(self, level_file, player):
+        self.player = player
         self.level_file = level_file
         self.image = map_loader.make_map(self.level_file)
         self.rect = self.image.get_rect()
@@ -63,7 +64,7 @@ class Level:
         for sprite, bullets in hits.items():
             for bullet in bullets:
                 Explosion(bullet.pos.x, bullet.pos.y, self.groups)
-                sprite.health -= bullet.stats["damage"]
+                sprite.damage(bullet.stats["damage"]) 
                 if sprite.health <= 0:
                     sprite.kill()
                     break
@@ -116,6 +117,6 @@ class Level:
             # pg.draw.rect(screen, (255, 255, 255), self.camera.apply(sprite.hit_rect), 1)
         for ai in self.ai_mobs:
             ai.draw_health(screen, self.camera)
-        # self.player.draw_health(screen, self.camera)
+        self.player.draw_hud(screen, self.camera)
         # for tank in self.groups['tanks']:
         #     tank.draw_health(screen, self.camera)

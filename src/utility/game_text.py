@@ -24,7 +24,7 @@ class TextRenderer:
         surface.blit(text_surface, text_rect)
 
         # Render at a relative cardinal location
-    def render(self, surface, text, size, color, location='c', font_name = 'arial'):
+    def render(self, surface, text, size, color, location='c', font_name='arial'):
         text_surface, text_rect = self._render_text_surface(text, size, color, font_name)
 
         # Determine where to blit the text
