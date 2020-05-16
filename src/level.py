@@ -2,12 +2,11 @@ import pygame as pg
 import random
 
 import src.utility.map_loader as map_loader
-from src.sprites.items.item import spawn_box
-from src.sprites.misc.obstacles import BoundaryWall
+from src.sprites.item import spawn_box
+from src.sprites.obstacles import BoundaryWall
 from src.sprites.camera import Camera
 from src.sprites.effects.explosion import Explosion
 from src.sprites.spriteW import bullet_collide_id, collide_hit_rect
-from src.sprites.tanks.tank import Tank
 
 vec = pg.math.Vector2
 
@@ -16,7 +15,6 @@ class Level:
     MAX_ITEMS = 1
     ITEM_RESPAWN_TIME = 5000
     def __init__(self, level_file, player):
-        self._player = player
         self.image = map_loader.make_map(level_file)
         self.rect = self.image.get_rect()
         self._groups = {'all': pg.sprite.LayeredUpdates(),
@@ -28,8 +26,7 @@ class Level:
                         'item_boxes': pg.sprite.Group()}
         self._ai_mobs = []
         map_loader.init_sprites(self._groups, player, self._ai_mobs)
-        for ai in self._ai_mobs:
-            ai.target = player.tank
+        self._player = player
 
         self._camera = Camera(player, self.rect.width, self.rect.height)
         player.camera = self._camera
@@ -63,7 +60,7 @@ class Level:
         for sprite, bullets in hits.items():
             for bullet in bullets:
                 Explosion(bullet.pos.x, bullet.pos.y, self._groups)
-                sprite.damage(bullet.stats["damage"])
+                sprite.damage(bullet.damage)
                 if sprite.health <= 0:
                     sprite.kill()
                     break
@@ -105,8 +102,8 @@ class Level:
             for tank_b in all_tanks[i + 1:]:
                 if collide_hit_rect(tank_a, tank_b):
                     knockback_dir = tank_b.rot
-                    tank_a.vel += vec(Tank.KNOCKBACK, 0).rotate(knockback_dir)
-                    tank_b.vel -= vec(Tank.KNOCKBACK, 0).rotate(knockback_dir)
+                    tank_a.vel += vec(tank_b.KNOCKBACK, 0).rotate(knockback_dir)
+                    tank_b.vel -= vec(tank_b.KNOCKBACK, 0).rotate(knockback_dir)
 
     def draw(self, screen):
         screen.blit(self.image, self._camera.apply(self.rect))

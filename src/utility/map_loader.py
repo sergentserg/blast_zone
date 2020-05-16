@@ -3,14 +3,14 @@
 from os import path
 import pygame as pg
 import pytmx
-import sys
 
 import src.config as cfg
-from src.sprites.tanks.color_tank import ColorTank
-import src.sprites.misc.obstacles as obstacles
-import src.sprites.items.item as item
+from src.sprites.tank import ColorTank
+import src.sprites.obstacles as obstacles
+import src.sprites.item as item
 from src.entities.turret_ctrl import TurretCtrl
 from src.entities.tank_ctrl import AITankCtrl
+from src.sprites.barrel import Turret
 
 class TiledMapLoader:
     def make_map(self, filename):
@@ -18,7 +18,7 @@ class TiledMapLoader:
         temp_surface = pg.Surface((self._width, self._height))
         self._render(temp_surface)
         return temp_surface
-        
+
     def _load_map(self, filename):
         tm = pytmx.load_pygame(path.join(cfg.MAP_DIR, filename),
                                 pixelalpha = True)
@@ -43,7 +43,7 @@ class TiledMapLoader:
         ai_turret_data = []
         for obj in self._tmxdata.objects:
             if obj.name == 'player_start':
-                player.set_tank(ColorTank(obj.x, obj.y, obj.color, groups))
+                player.set_tank(ColorTank(obj.x, obj.y, obj.color, obj.type, groups))
             if obj.name == 'smallTree':
                 obstacles.Tree(obj.x, obj.y, groups)
             if obj.name == 'AIPatrolPoint':
@@ -54,15 +54,17 @@ class TiledMapLoader:
                 ai_turret_data.append(obj)
             if obj.name == 'enemyTank':
                 ai_tank = obj
-        # Spawn player tank.
 
         # Spawn enemy AI tank and provide path information.
         ai_path_data.sort(key=lambda point: point.path_index)
-        ai_mobs.append(AITankCtrl(ai_tank.x, ai_tank.y, player.tank, ai_path_data, ai_tank.color, groups))
+        tank = ColorTank(ai_tank.x, ai_tank.y, ai_tank.color, ai_tank.type, groups)
+        ai_mobs.append(AITankCtrl(tank, ai_path_data, player.tank))
 
         # Spawn all turrets.
         for t in ai_turret_data:
-            ai_mobs.append(TurretCtrl(t.x, t.y, player.tank, t.type, t.style, groups))
+            turret = Turret(t.x, t.y, t.type, t.style, groups)
+            ai_mobs.append(TurretCtrl(turret, player.tank))
+
 
 _map_loader = TiledMapLoader()
 

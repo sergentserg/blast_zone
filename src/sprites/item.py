@@ -69,25 +69,25 @@ class Item(SpriteW):
     BOB_SPEED = 0.2
     def __init__(self, x, y, image, sound, groups):
         SpriteW.__init__(self, x, y, image, (groups['all'], groups['items']))
-        self.sfx = sfx_loader.get_sfx(sound)
+        self._sfx = sfx_loader.get_sfx(sound)
         # Tween function maps integer steps to values between 0 and 1.
-        self.spawn_pos = vec(x, y)
-        self.tween = tween.easeInOutSine
-        self.step = 0
-        self.direction = 1
+        self._spawn_pos = vec(x, y)
+        self._tween = tween.easeInOutSine
+        self._step = 0
+        self._direction = 1
 
     def update(self, dt):
         # Shift bobbing y offset to bob about item's original center.
-        offset = Item.BOB_RANGE * (self.tween(self.step / Item.BOB_RANGE) - 0.5)
-        self.rect.centery = self.spawn_pos.y + offset * self.direction
-        self.step += Item.BOB_SPEED
+        offset = Item.BOB_RANGE * (self._tween(self._step / Item.BOB_RANGE) - 0.5)
+        self.rect.centery = self._spawn_pos.y + offset * self._direction
+        self._step += Item.BOB_SPEED
         # Reverse bobbing direction when item returns to center.
-        if self.step > Item.BOB_RANGE:
-            self.step = 0
-            self.direction *= -1
+        if self._step > Item.BOB_RANGE:
+            self._step = 0
+            self._direction *= -1
 
     def kill(self):
-        self.sfx.play()
+        self._sfx.play()
         super().kill()
 
 

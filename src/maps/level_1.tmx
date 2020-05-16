@@ -501,13 +501,13 @@
   <object id="5" name="smallTree" x="348" y="668"/>
   <object id="6" name="smallTree" x="1040" y="304"/>
   <object id="7" name="smallTree" x="1104" y="304"/>
-  <object id="12" name="enemyTank" x="1300" y="455" width="60" height="72">
+  <object id="12" name="enemyTank" type="standard" x="1300" y="455" width="60" height="72">
    <properties>
     <property name="color" value="blue"/>
     <property name="img" value="tank_huge.png"/>
    </properties>
   </object>
-  <object id="23" name="player_start" x="62" y="467" width="43" height="37">
+  <object id="23" name="player_start" type="standard" x="62" y="467" width="43" height="37">
    <properties>
     <property name="color" value="red"/>
    </properties>

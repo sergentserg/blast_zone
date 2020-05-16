@@ -140,6 +140,8 @@ class GamePlayingState:
 
     def create_level(self):
         """ Creates a new player and restarts level sprites. """
+        self._paused = False
+        self._game.ui.clear()
         self._player = PlayerCtrl()
         self._level = Level('level_1.tmx', self._player)
 
@@ -158,7 +160,7 @@ class GamePlayingState:
         else:
             actions = [
                 {'action': self.pause,'text': 'Resume'},
-                {'action': lambda: self._game.set_state(GamePlayingState), 'text': 'Restart'},
+                {'action': self.create_level, 'text': 'Restart'},
                 {'action': lambda: self._game.set_state(GameNotPlayingState),'text': 'Main Menu'}
             ]
             self._game.ui.make_menu("Game Paused", actions, 24, cfg.WHITE)
