@@ -1,5 +1,5 @@
 import pygame as pg
-vec = pg.math.Vector2
+
 
 class Rotatable:
     """ Class for Sprite objects that may rotate. Referenced instance variables,
@@ -15,13 +15,14 @@ class Rotatable:
 
     def rotate(self, dt = 0):
         self.rot = (self.rot + self.rot_speed *  dt) % 360
-        self.rotate_image(self, self.orig_image, self.rot - self.IMAGE_ROT)
+        self.rotate_image(self.rot - self.IMAGE_ROT)
+        # self.rotate_image(self, self.orig_image, self.rot - self.IMAGE_ROT)
 
-    @classmethod
-    def rotate_image(cls, sprite, orig_image, rot):
-        old_center = sprite.rect.center
-        # Default image rotation means 0 rotation
-        sprite.image = pg.transform.rotate(orig_image, rot)
-        sprite.rect = sprite.image.get_rect()
-        # Re-center the rectangle (assumes self.pos tracks center)
-        sprite.rect.center = old_center
+    # @classmethod
+    # def rotate_image(cls, sprite, orig_image, rot):
+    #     old_center = sprite.rect.center
+    #     # Default image rotation means 0 rotation
+    #     sprite.image = pg.transform.rotate(orig_image, rot)
+    #     sprite.rect = sprite.image.get_rect()
+    #     # Re-center the rectangle (assumes self.pos tracks center)
+    #     sprite.rect.center = old_center

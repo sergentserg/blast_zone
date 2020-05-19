@@ -11,6 +11,10 @@ class AIMob:
     def target(self):
         return self._target
 
+    @property
+    def state(self):
+        return self._state
+
     def update(self, dt):
         self._ray_to_target = self._target.pos - self._sprite.pos
         self._state.update(dt)

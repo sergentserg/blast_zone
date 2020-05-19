@@ -37,21 +37,23 @@ class Tank(SpriteW, MovableNonlinear, Rotatable, Damageable):
     def range(self):
         return self._barrels[0].range
 
+    def equip_barrel(self, barrel):
+        barrel.id = self.id
+        self._barrels.append(barrel)
+
     def _spawn_tracks(self):
         Tracks(*self.pos, self.hit_rect.height, self.hit_rect.height,
                                                     self.rot, self.groups)
         self._last_track = pg.time.get_ticks()
 
     def rotate_barrel(self, dir):
+        # pass
         for barrel in self._barrels:
             barrel.rot = dir
             barrel.rotate()
 
     def get_ammo_count(self):
         return self._barrels[0].get_ammo_count()
-
-    def has_ammo(self):
-        return self._barrels[0].has_ammo()
 
     def fire(self):
         for barrel in self._barrels:
@@ -84,13 +86,55 @@ class ColorTank(Tank):
         Tank.__init__(self, x, y, img, groups)
         self.id = id(self)
         # Create, position, and assign id to barrel.
-        offset = self.hit_rect.height // 3
+        offset = cfg.Vec2(self.hit_rect.height // 3, 0)
         self.color = color.capitalize()
         barrel = Barrel(self.color, type, self, offset, _BARREL_IMAGES[self.color][type], groups)
         # barrel.rect.midtop = self.rect.center
         barrel.id = self.id
         self._barrels.append(barrel)
         self.max_ammo = self._barrels[0].get_ammo_count()
+
+
+class BigTank(Tank):
+    _IMAGE = "tankBody_bigRed.png"
+    def __init__(self, x, y, groups):
+        Tank.__init__(self, x, y, BigTank._IMAGE, groups)
+        self.id = id(self)
+        self.equip_barrel(Barrel("Dark", "standard", self, cfg.Vec2(0, -10),"specialBarrel1.png", groups))
+        self.equip_barrel(Barrel("Dark", "standard", self, cfg.Vec2(0, 10),"specialBarrel1.png", groups))
+        barrel.flip(True, False)
+        # barrel.orig_image = barrel.image
+        self.equip_barrel(barrel)
+        self.max_ammo = self._barrels[0].get_ammo_count()
+        self.color = "Dark"
+
+
+class LargeTank(Tank):
+    _IMAGE = "tankBody_darkLarge.png"
+    def __init__(self, x, y, groups):
+        Tank.__init__(self, x, y, LargeTank._IMAGE, groups)
+        self.id = id(self)
+        self.equip_barrel(Barrel("Dark", "standard", self, cfg.Vec2(0, -10),"specialBarrel4.png", groups))
+        barrel = Barrel("Dark", "standard", self, cfg.Vec2(0, 10),"specialBarrel4.png", groups)
+        barrel.flip(True, False)
+        # barrel.orig_image = barrel.image
+        self.equip_barrel(barrel)
+        self.max_ammo = self._barrels[0].get_ammo_count()
+        self.color = "Dark"
+
+class HugeTank(Tank):
+    _IMAGE = "tankBody_huge_outline.png"
+    def __init__(self, x, y, groups):
+        Tank.__init__(self, x, y, HugeTank._IMAGE, groups)
+        self.id = id(self)
+        self.equip_barrel(Barrel("Dark", "standard", self, cfg.Vec2(-10, 0),"specialBarrel1.png", groups))
+        self.equip_barrel(Barrel("Dark", "standard", self, cfg.Vec2(20, -10),"specialBarrel4.png", groups))
+        barrel = Barrel("Dark", "standard", self, cfg.Vec2(20, 10),"specialBarrel4.png", groups)
+        barrel.flip(True, False)
+        # barrel.orig_image = barrel.image
+        self.equip_barrel(barrel)
+        self.max_ammo = self._barrels[0].get_ammo_count()
+        self.color = "Dark"
 
 
 class Tracks(SpriteW):
@@ -110,7 +154,7 @@ class Tracks(SpriteW):
     def update(self, dt):
         # Fade effect.
         if self._alpha > 0:
-            self._alpha -= 2
+            self._alpha -= 4
             self.image.set_alpha(self._alpha)
         else:
             self.kill()

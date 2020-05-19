@@ -8,8 +8,8 @@ class Damageable:
         self.health = self.MAX_HEALTH
         self.hit_rect = hit_rect
 
-    def heal(self, amount):
-        self.health += amount
+    def heal(self, pct):
+        self.health += int(pct * self.MAX_HEALTH)
         if self.health > self.MAX_HEALTH:
             self.health = self.MAX_HEALTH
 

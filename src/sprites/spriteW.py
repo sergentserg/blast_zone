@@ -8,6 +8,7 @@ class SpriteW(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, groups)
         self.image = sprite_loader.get_image(image)
         self.image.set_colorkey(cfg.BLACK)
+        self.orig_image = self.image
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
@@ -15,6 +16,22 @@ class SpriteW(pg.sprite.Sprite):
         self.hit_rect = self.rect
         # Default id used in collision with bullets.
         self.id = -1
+
+    def flip(self, xreflect, yreflect):
+        old_center = self.rect.center
+        self.image = pg.transform.flip(self.image, xreflect, yreflect)
+        self.image.set_colorkey(cfg.BLACK)
+        self.orig_image = self.image
+        self.rect = self.image.get_rect()
+        self.rect.center = old_center
+
+    def rotate_image(self, rot):
+        old_center = self.rect.center
+        # Default image rotation means 0 rotation
+        self.image = pg.transform.rotate(self.orig_image, rot)
+        self.rect = self.image.get_rect()
+        # Re-center the rectangle (assumes self.pos tracks center)
+        self.rect.center = old_center
 
 def collide_hit_rect(sprite_a, sprite_b):
     return sprite_a.hit_rect.colliderect(sprite_b.hit_rect)

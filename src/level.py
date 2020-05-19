@@ -14,7 +14,9 @@ vec = pg.math.Vector2
 class Level:
     MAX_ITEMS = 1
     ITEM_RESPAWN_TIME = 5000
-    def __init__(self, level_file, player):
+    def __init__(self, level_file, player, game_state):
+        self._game_state = game_state
+        self._score = 0
         self.image = map_loader.make_map(level_file)
         self.rect = self.image.get_rect()
         self._groups = {'all': pg.sprite.LayeredUpdates(),
@@ -48,8 +50,11 @@ class Level:
         self._groups['all'].update(dt)
         # Update list of ai mobs.
         self._ai_mobs = [ai for ai in self._ai_mobs if ai.alive()]
-        for ai in self._ai_mobs:
-            ai.update(dt)
+        if self._ai_mobs:
+            for ai in self._ai_mobs:
+                ai.update(dt)
+        else:
+            self._game_state.game_over()
         self._camera.update()
 
         # Handle damage-causing bullets.
@@ -63,6 +68,8 @@ class Level:
                 sprite.damage(bullet.damage)
                 if sprite.health <= 0:
                     sprite.kill()
+                    if not self._player.alive():
+                        self._game_state.game_over()
                     break
 
         # Handle bullets that destroy item boxes.

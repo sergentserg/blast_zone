@@ -14,6 +14,13 @@ _STATS = {
           "rapid": {"fire_delay": 400, "max_ammo":20 },
           "power": {"fire_delay": 600, "max_ammo":20}
 }
+
+_BARREL_IMAGES = {}
+for color in {"Blue", "Dark", "Green", "Red", "Sand"}:
+    _BARREL_IMAGES[color] = {}
+    for type in {("standard", 1), ("power", 2), ("rapid", 3)}:
+        _BARREL_IMAGES[color][type[0]] = f"tank{color}_barrel{type[1]}.png"
+
 _RELOAD_TIMER = 10000
 
 
@@ -39,8 +46,7 @@ class Barrel(SpriteW, Rotatable):
 
     def update(self, dt):
         self.rect.center = cfg.Vec2(*self._parent.rect.center) + \
-                                    cfg.Vec2(self._offset, 0).rotate(-self.rot)
-
+                                    self._offset.rotate(-self.rot)
     @property
     def range(self):
         return Bullet.range(self._type)
@@ -102,14 +108,12 @@ class Turret(Barricade, Damageable):
         return self._barrel.get_ammo_count()
 
     def attempt_reload(self):
-        if self._barrel.can_reload:
+        if self._barrel.can_reload():
             self._barrel.reload()
 
     def fire(self, dir):
         self._barrel.rot = dir
         self._barrel.rotate()
-        if self._barrel._ammo_count <= 0:
-            self._barrel.reload()
         self._barrel.fire()
 
 
@@ -120,7 +124,8 @@ class MuzzleFlash(SpriteW):
     def __init__(self, x, y, rot, groups):
         self._layer = cfg.EFFECTS_LAYER
         SpriteW.__init__(self, x, y, MuzzleFlash.IMAGE, groups['all'])
-        Rotatable.rotate_image(self, self.image, rot - MuzzleFlash.IMG_ROT)
+        self.rotate_image(rot - MuzzleFlash.IMG_ROT)
+        # Rotatable.rotate_image(self, self.image, rot - MuzzleFlash.IMG_ROT)
         self._spawn_time = pg.time.get_ticks()
 
     def update(self, dt):

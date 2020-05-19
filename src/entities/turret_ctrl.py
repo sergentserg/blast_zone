@@ -2,13 +2,18 @@ import pygame as pg
 
 import src.config as cfg
 from src.entities.ai_mob import AIMob
+from src.entities.tank_ctrl import AIPursueState
 
 
 class TurretCtrl(AIMob):
-    def __init__(self, turret, target):
+    def __init__(self, turret, target, ai_tank):
         AIMob.__init__(self, target)
         self._sprite = turret
+        self._ai_tank = ai_tank
         self.set_state(AIAttackState)
+
+    def is_tank_pursuing(self):
+        return type(self._ai_tank.state) == AIPursueState
 
     @property
     def turret(self):
@@ -20,8 +25,10 @@ class AIAttackState:
         self._ai = ai
 
     def update(self, dt):
-        if self._ai.turret.get_ammo_count() > 0 and self._ai.is_target_in_range():
-            dir = self._ai.angle_to_target()
-            self._ai.turret.fire(dir)
-        else:
-            self._ai.turret.attempt_reload()
+        if self._ai.is_target_in_range():
+            if self._ai.turret.get_ammo_count() > 0:
+                if not self._ai.is_tank_pursuing():
+                    dir = self._ai.angle_to_target()
+                    self._ai.turret.fire(dir)
+            else:
+                self._ai.turret.attempt_reload()

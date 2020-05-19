@@ -8,6 +8,8 @@ from src.ui import UI
 from src.input.input_manager import InputManager
 from src.level import Level
 from src.entities.player_ctrl import PlayerCtrl
+from src.utility.timer import Timer
+import src.utility.game_text as gtext
 
 
 class Game:
@@ -38,6 +40,10 @@ class Game:
     @property
     def screen(self):
         return self._screen
+
+    @property
+    def clock(self):
+        return self._clock
 
     @property
     def ui(self):
@@ -133,30 +139,33 @@ class GamePlayingState:
     def __init__(self, game):
         self._game = game
         self._paused = False
+        self._game_over = False
 
     def enter(self):
         self.create_level()
-        # Load sounds?
 
     def create_level(self):
         """ Creates a new player and restarts level sprites. """
         self._paused = False
         self._game.ui.clear()
         self._player = PlayerCtrl()
-        self._level = Level('level_1.tmx', self._player)
+        self._level = Level('level_1.tmx', self._player, self)
+        self._timer = Timer()
 
     def exit(self):
         # Save score or something
         self._game.ui.clear()
 
     def process_events(self, event):
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_p:
-                self.pause()
+        if not self._game_over:
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_p:
+                    self.pause()
 
     def pause(self):
         if self._paused:
             self._game.ui.pop_menu()
+            self._timer.unpause()
         else:
             actions = [
                 {'action': self.pause,'text': 'Resume'},
@@ -164,10 +173,25 @@ class GamePlayingState:
                 {'action': lambda: self._game.set_state(GameNotPlayingState),'text': 'Main Menu'}
             ]
             self._game.ui.make_menu("Game Paused", actions, 24, cfg.WHITE)
+            self._timer.pause()
         self._paused = not self._paused
 
+    def game_over(self):
+        actions = [
+            {'action': lambda: self._game.set_state(GamePlayingState),'text': 'Play Again'},
+            {'action': lambda: self._game.set_state(GameNotPlayingState),'text': 'Main Menu'},
+            {'action': self._game.quit, 'text': 'Quit'}
+        ]
+        if self._player.alive():
+            title = "You win!"
+        else:
+            title = "Game Over!"
+        self._game.ui.make_menu(title, actions, 24, cfg.WHITE)
+        self._timer.pause()
+        self._game_over = True
+
     def handle_input(self, active_bindings, mouse_state, mouse_x, mouse_y):
-        if not self._paused:
+        if not (self._paused or self._game_over):
             self._player.handle_keys(active_bindings)
             self._player.handle_mouse(mouse_state, mouse_x, mouse_y)
 
@@ -178,3 +202,7 @@ class GamePlayingState:
     def draw(self):
         self._level.draw(self._game.screen)
         self._game.ui.draw(self._game.screen)
+        total_secs = self._timer.get_seconds()
+        mins = total_secs // 60
+        secs = total_secs % 60
+        gtext.render(self._game.screen, f"{mins:02d}:{secs:02d}", 24, cfg.WHITE, location='n')

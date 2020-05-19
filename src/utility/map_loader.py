@@ -5,7 +5,7 @@ import pygame as pg
 import pytmx
 
 import src.config as cfg
-from src.sprites.tank import ColorTank
+from src.sprites.tank import ColorTank, LargeTank, BigTank, HugeTank
 import src.sprites.obstacles as obstacles
 import src.sprites.item as item
 from src.entities.turret_ctrl import TurretCtrl
@@ -43,7 +43,8 @@ class TiledMapLoader:
         ai_turret_data = []
         for obj in self._tmxdata.objects:
             if obj.name == 'player_start':
-                player.set_tank(ColorTank(obj.x, obj.y, obj.color, obj.type, groups))
+                player.tank = ColorTank(obj.x, obj.y, obj.color, obj.type, groups)
+                # player.tank = HugeTank(obj.x, obj.y, groups)
             if obj.name == 'smallTree':
                 obstacles.Tree(obj.x, obj.y, groups)
             if obj.name == 'AIPatrolPoint':
@@ -57,13 +58,14 @@ class TiledMapLoader:
 
         # Spawn enemy AI tank and provide path information.
         ai_path_data.sort(key=lambda point: point.path_index)
-        tank = ColorTank(ai_tank.x, ai_tank.y, ai_tank.color, ai_tank.type, groups)
-        ai_mobs.append(AITankCtrl(tank, ai_path_data, player.tank))
+        tank = LargeTank(ai_tank.x, ai_tank.y, groups)
+        tank_ctrl = AITankCtrl(tank, ai_path_data, player.tank)
+        ai_mobs.append(tank_ctrl)
 
         # Spawn all turrets.
         for t in ai_turret_data:
             turret = Turret(t.x, t.y, t.type, t.style, groups)
-            ai_mobs.append(TurretCtrl(turret, player.tank))
+            ai_mobs.append(TurretCtrl(turret, player.tank, tank_ctrl))
 
 
 _map_loader = TiledMapLoader()

@@ -27,7 +27,8 @@ class Bullet(SpriteW, Movable):
         self._layer = cfg.ITEM_LAYER
         SpriteW.__init__(self, x, y, _IMAGES[type][color], (groups['all'], groups['bullets']))
         Movable.__init__(self, x, y)
-        Rotatable.rotate_image(self, self.image, dir - Bullet.IMAGE_ROT)
+        self.rotate_image(dir - Bullet.IMAGE_ROT)
+        # Rotatable.rotate_image(self, self.image, dir - Bullet.IMAGE_ROT)
         self.hit_rect = self.rect
         self._damage = _STATS[type]["damage"]
         self.vel = cfg.Vec2(_STATS[type]["speed"], 0).rotate(-dir)
