@@ -2,6 +2,7 @@ import pygame as pg
 
 import src.config as cfg
 from src.sprites.spriteW import SpriteW, collide_hit_rect
+from src.utility.timer import Timer
 from src.sprites.attributes.movable import MovableNonlinear
 from src.sprites.attributes.rotatable import Rotatable
 from src.sprites.attributes.damageable import Damageable
@@ -23,19 +24,28 @@ class Tank(SpriteW, MovableNonlinear, Rotatable, Damageable):
         Damageable.__init__(self, self.hit_rect)
         self.groups = groups
         self._barrels = []
+        self._items = []
         self.hit_rect.center = self.pos
-        self._last_track = 0
+        self._track_timer = Timer()
 
     def update(self, dt):
         self.rotate(dt)
         self.move(self.groups['obstacles'], dt)
-        can_spawn_track = cfg.time_since(self._last_track) > Tank._TRACK_DELAY
+        for item in self._items:
+            if item.effect_subsided():
+                self._items.remove(item)
+        can_spawn_track = self._track_timer.elapsed_time() > Tank._TRACK_DELAY
         if self.vel.length_squared() > Tank._SPEED_CUTOFF and can_spawn_track:
             self._spawn_tracks()
 
     @property
     def range(self):
         return self._barrels[0].range
+
+    def pickup(self, item):
+        item.apply_effect(self)
+        if item.DURATION > 0:
+            self._items.append(item)
 
     def equip_barrel(self, barrel):
         barrel.id = self.id
@@ -44,7 +54,7 @@ class Tank(SpriteW, MovableNonlinear, Rotatable, Damageable):
     def _spawn_tracks(self):
         Tracks(*self.pos, self.hit_rect.height, self.hit_rect.height,
                                                     self.rot, self.groups)
-        self._last_track = pg.time.get_ticks()
+        self._track_timer.restart()
 
     def rotate_barrel(self, dir):
         # pass

@@ -1,6 +1,7 @@
 import pygame as pg
 
 import src.config as cfg
+from src.utility.timer import Timer
 from src.sprites.spriteW import SpriteW
 from src.sprites.attributes.movable import Movable
 from src.sprites.attributes.rotatable import Rotatable
@@ -15,9 +16,9 @@ _IMAGES = {
                         for color in ["Blue", "Dark", "Green", "Red", "Sand"]}
 }
 _STATS = {
-          "standard": {"damage": 8, "speed": 500, "lifetime": 750, "max_ammo": 20},
-          "rapid": {"damage": 8, "speed": 600, "lifetime": 750, "max_ammo": 20},
-          "power": {"damage": 8, "speed": 400, "lifetime": 750, "max_ammo": 20}
+          "standard": {"damage": 8, "speed": 500, "lifetime": 750},
+          "rapid": {"damage": 6, "speed": 600, "lifetime": 750},
+          "power": {"damage": 10, "speed": 400, "lifetime": 750}
 }
 
 
@@ -33,7 +34,7 @@ class Bullet(SpriteW, Movable):
         self._damage = _STATS[type]["damage"]
         self.vel = cfg.Vec2(_STATS[type]["speed"], 0).rotate(-dir)
         self._lifetime = _STATS[type]["lifetime"]
-        self._spawn_time = pg.time.get_ticks()
+        self._spawn_timer = Timer()
         self.id = id
 
     @classmethod
@@ -45,7 +46,7 @@ class Bullet(SpriteW, Movable):
         return self._damage
 
     def update(self, dt):
-        if cfg.time_since(self._spawn_time) > self._lifetime:
+        if self._spawn_timer.elapsed_time() > self._lifetime:
             self.kill()
         else:
             self.move(dt)

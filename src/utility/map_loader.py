@@ -49,12 +49,12 @@ class TiledMapLoader:
                 obstacles.Tree(obj.x, obj.y, groups)
             if obj.name == 'AIPatrolPoint':
                 ai_path_data.append(obj)
-            if obj.name == 'box':
-                item.spawn_box(obj.x, obj.y, groups)
             if obj.name == 'turret':
                 ai_turret_data.append(obj)
             if obj.name == 'enemyTank':
                 ai_tank = obj
+            if obj.name == 'boxSpawnLocation':
+                item.ItemBox.SPAWN_LOCATIONS.append((obj.x, obj.y))
 
         # Spawn enemy AI tank and provide path information.
         ai_path_data.sort(key=lambda point: point.path_index)

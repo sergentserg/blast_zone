@@ -4,6 +4,7 @@ import pygame as pg
 from itertools import cycle
 
 import src.config as cfg
+from src.utility.timer import Timer
 from src.entities.ai_mob import AIMob
 
 
@@ -35,15 +36,15 @@ class AITankState:
     WALL_TURN_ANGLE = 15
     def __init__(self, ai):
         self._ai = ai
-        self._crash_time = -math.inf
+        self._crash_timer = Timer()
 
     def check_for_walls(self):
         if self._ai.tank.collided_with_wall():
-            self._crash_time = pg.time.get_ticks()
+            self._crash_timer.restart()
             self._ai.rotate_to(self._ai.tank.rot + AITankState.WALL_TURN_ANGLE)
 
     def is_avoiding_wall(self):
-        return cfg.time_since(self._crash_time) < AITankState.WALL_AVOID_DURATION
+        return self._crash_timer.elapsed_time() < AITankState.WALL_AVOID_DURATION
 
 
 class AIPatrolState(AITankState):

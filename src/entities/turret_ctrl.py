@@ -6,14 +6,14 @@ from src.entities.tank_ctrl import AIPursueState
 
 
 class TurretCtrl(AIMob):
-    def __init__(self, turret, target, ai_tank):
+    def __init__(self, turret, target, ai_boss):
         AIMob.__init__(self, target)
         self._sprite = turret
-        self._ai_tank = ai_tank
+        self._ai_boss = ai_boss
         self.set_state(AIAttackState)
 
     def is_tank_pursuing(self):
-        return type(self._ai_tank.state) == AIPursueState
+        return self._ai_boss.alive() and type(self._ai_boss.state) == AIPursueState
 
     @property
     def turret(self):

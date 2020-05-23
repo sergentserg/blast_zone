@@ -8,11 +8,12 @@ from src.sprites.attributes.rotatable import Rotatable
 from src.sprites.bullet import Bullet
 from src.sprites.obstacles import Barricade
 from src.sprites.attributes.damageable import Damageable
+from src.utility.timer import Timer
 
 _STATS = {
-          "standard": {"fire_delay": 500, "max_ammo": 20},
-          "rapid": {"fire_delay": 400, "max_ammo":20 },
-          "power": {"fire_delay": 600, "max_ammo":20}
+          "standard": {"fire_delay": 350, "max_ammo": 20},
+          "rapid": {"fire_delay": 250, "max_ammo": 20 },
+          "power": {"fire_delay": 400, "max_ammo": 20}
 }
 
 _BARREL_IMAGES = {}
@@ -21,11 +22,12 @@ for color in {"Blue", "Dark", "Green", "Red", "Sand"}:
     for type in {("standard", 1), ("power", 2), ("rapid", 3)}:
         _BARREL_IMAGES[color][type[0]] = f"tank{color}_barrel{type[1]}.png"
 
-_RELOAD_TIMER = 10000
+
+RELOAD_DURATION = 10000
 
 
 class Barrel(SpriteW, Rotatable):
-    FIRE_SFX = 'shoot.wav'
+    _FIRE_SFX = 'shoot.wav'
     def __init__(self, color, type, parent, offset, image, groups):
         self._layer = cfg.BARREL_LAYER
         SpriteW.__init__(self, *parent.rect.center, image, (groups['all'],))
@@ -41,8 +43,9 @@ class Barrel(SpriteW, Rotatable):
         self._parent = parent
         self._offset = offset
 
-        self._last_shot = -math.inf
-        self._fire_sfx = sfx_loader.get_sfx(Barrel.FIRE_SFX)
+        self._fire_delay = _STATS[self._type]["fire_delay"]
+        self._fire_timer = Timer()
+        self._fire_sfx = sfx_loader.get_sfx(Barrel._FIRE_SFX)
 
     def update(self, dt):
         self.rect.center = cfg.Vec2(*self._parent.rect.center) + \
@@ -51,9 +54,17 @@ class Barrel(SpriteW, Rotatable):
     def range(self):
         return Bullet.range(self._type)
 
+    @property
+    def fire_delay(self):
+        return self._fire_delay
+
+    @fire_delay.setter
+    def fire_delay(self, new_fire_delay):
+        self._fire_delay = new_fire_delay
+
     def fire(self):
-        if cfg.time_since(self._last_shot) > _STATS[self._type]["fire_delay"]:
-            self._last_shot = pg.time.get_ticks()
+        if self._fire_timer.elapsed_time() > self._fire_delay:
+            self._fire_timer.restart()
             self._spawn_bullet()
             self._fire_sfx.play()
 
@@ -65,7 +76,7 @@ class Barrel(SpriteW, Rotatable):
         self._ammo_count -= 1
 
     def can_reload(self):
-        return cfg.time_since(self._last_shot) > _RELOAD_TIMER
+        return self._fire_timer.elapsed_time() > RELOAD_DURATION
 
     def get_ammo_count(self):
         return self._ammo_count
@@ -126,8 +137,8 @@ class MuzzleFlash(SpriteW):
         SpriteW.__init__(self, x, y, MuzzleFlash.IMAGE, groups['all'])
         self.rotate_image(rot - MuzzleFlash.IMG_ROT)
         # Rotatable.rotate_image(self, self.image, rot - MuzzleFlash.IMG_ROT)
-        self._spawn_time = pg.time.get_ticks()
+        self._spawn_timer = Timer()
 
     def update(self, dt):
-        if cfg.time_since(self._spawn_time) > MuzzleFlash.FLASH_DURATION:
+        if self._spawn_timer.elapsed_time() > MuzzleFlash.FLASH_DURATION:
             self.kill()

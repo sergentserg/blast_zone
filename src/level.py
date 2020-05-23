@@ -2,6 +2,7 @@ import pygame as pg
 import random
 
 import src.utility.map_loader as map_loader
+from src.utility.timer import Timer
 from src.sprites.item import spawn_box
 from src.sprites.obstacles import BoundaryWall
 from src.sprites.camera import Camera
@@ -40,21 +41,17 @@ class Level:
         BoundaryWall(0, 0, 1, self.rect.height, self._groups)
         BoundaryWall(self.rect.width, 0, 1, self.rect.height, self._groups)
 
-        self.item_destroyed_time = pg.time.get_ticks()
+        self._item_timer = Timer()
         self.level_music = None
 
     def _can_spawn_item(self):
-        return (pg.time.get_ticks() - self.item_destroyed_time) > Level.ITEM_RESPAWN_TIME
+        return self._item_timer.elapsed_time() > Level.ITEM_RESPAWN_TIME
 
     def update(self, dt):
         self._groups['all'].update(dt)
         # Update list of ai mobs.
-        self._ai_mobs = [ai for ai in self._ai_mobs if ai.alive()]
-        if self._ai_mobs:
-            for ai in self._ai_mobs:
-                ai.update(dt)
-        else:
-            self._game_state.game_over()
+        for ai in self._ai_mobs:
+            ai.update(dt)
         self._camera.update()
 
         # Handle damage-causing bullets.
@@ -70,6 +67,10 @@ class Level:
                     sprite.kill()
                     if not self._player.alive():
                         self._game_state.game_over()
+                    else:
+                        self._ai_mobs = [ai for ai in self._ai_mobs if ai.alive()]
+                        if len(self._ai_mobs) == 0:
+                            self._game_state.game_over()
                     break
 
         # Handle bullets that destroy item boxes.
@@ -80,14 +81,12 @@ class Level:
                         bullet.kill()
                         box.wear_out()
                         if box.is_broken():
-                            self.item_destroyed_time = pg.time.get_ticks()
+                            self._item_timer.restart()
                             break
 
         # See if it's time to spawn a new item.
         if len(self._groups['item_boxes']) < Level.MAX_ITEMS and self._can_spawn_item():
-            x = random.randint(0, self.rect.width)
-            y = random.randint(0, self.rect.height)
-            spawn_box(x, y, self._groups)
+            spawn_box(self._groups)
 
 
         # Handle bullets that hit other obstacles.
@@ -100,7 +99,8 @@ class Level:
                                         self._groups['items'], False, False)
         for tank, items in hits.items():
             for item in items:
-                item.apply_effect(tank)
+                tank.pickup(item)
+                # item.apply_effect(tank)
 
         # Tank/tank collision.
         all_tanks = list(self._groups['tanks'])

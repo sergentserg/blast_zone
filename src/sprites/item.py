@@ -5,12 +5,15 @@ from pygame.math import Vector2 as vec
 from itertools import chain
 
 from src.sprites.spriteW import SpriteW
+from src.utility.timer import Timer
+import src.config as cfg
 import src.utility.sound_loader as sfx_loader
 
 # Credits to Chris Bradfield from KidsCanCode for the item bobbing animation.
 
 class ItemBox(SpriteW):
-    DISAPPEAR_ALPHA = [alpha for alpha in range(175, 255, 15)]
+    _DISAPPEAR_ALPHA = [alpha for alpha in range(175, 255, 15)]
+    SPAWN_LOCATIONS = []
     SFX = 'box.wav'
     def __init__(self, x, y, max_durability, image, groups):
         SpriteW.__init__(self, x, y, image,
@@ -20,7 +23,7 @@ class ItemBox(SpriteW):
         self.groups = groups
         self._box_sfx = sfx_loader.get_sfx(ItemBox.SFX)
         self._durability = max_durability
-        self._disappear_alpha = chain(ItemBox.DISAPPEAR_ALPHA * 2)
+        self._disappear_alpha = chain(ItemBox._DISAPPEAR_ALPHA * 2)
 
     def wear_out(self):
         # Wears out the box or destroys it.
@@ -51,7 +54,7 @@ class ItemBox(SpriteW):
 class WoodenBox(ItemBox):
     IMAGE = 'crateWood.png'
     MAX_DURABILITY = 2
-    SPAWN_RATE = 0.2
+    SPAWN_RATE = 0.4
     def __init__(self, x, y, groups):
         ItemBox.__init__(self, x, y, WoodenBox.MAX_DURABILITY, WoodenBox.IMAGE, groups)
 
@@ -64,6 +67,7 @@ class MetalBox(ItemBox):
 
 
 class Item(SpriteW):
+    DURATION = 0
     # Number of pixels up and down that item will bob.
     BOB_RANGE = 15
     BOB_SPEED = 0.2
@@ -75,6 +79,7 @@ class Item(SpriteW):
         self._tween = tween.easeInOutSine
         self._step = 0
         self._direction = 1
+        self.groups = groups
 
     def update(self, dt):
         # Shift bobbing y offset to bob about item's original center.
@@ -90,6 +95,27 @@ class Item(SpriteW):
         self._sfx.play()
         super().kill()
 
+class DurationItem(Item):
+    def __init__(self, x, y, duration, image, sound, groups):
+        Item.__init__(self, x, y, image, sound, groups)
+        self._effect_timer = Timer()
+        self._item_duration = duration
+        self._tank = None
+
+    def apply_effect(self, tank):
+        self._effect_timer.restart()
+        self._tank = tank
+        super().kill()
+
+    def effect_subsided(self):
+        if self._effect_timer.elapsed_time() > self._item_duration:
+            self._remove_effect()
+            return True
+        return False
+
+    def _remove_effect(self):
+        pass
+
 
 class HealthItem(Item):
     IMAGE = 'health_item.png'
@@ -104,32 +130,37 @@ class HealthItem(Item):
         super().kill()
 
 
-class AmmoItem(Item):
+class AmmoItem(DurationItem):
     IMAGE = 'ammo_item.png'
     SFX = 'reload.wav'
+    DURATION = 10000
     def __init__(self, x, y, groups):
-        Item.__init__(self, x, y, AmmoItem.IMAGE, AmmoItem.SFX, groups)
+        DurationItem.__init__(self, x, y, AmmoItem.DURATION, AmmoItem.IMAGE, AmmoItem.SFX, groups)
 
     def apply_effect(self, tank):
         tank.reload()
-        super().kill()
+        super().apply_effect(tank)
 
 
-class SpeedItem(Item):
+class SpeedItem(DurationItem):
     IMAGE = 'speed_item.png'
     SFX = 'speedup.wav'
+    BOOST_PCT = 1.8
+    DURATION = 10000
     def __init__(self, x, y, groups):
-        Item.__init__(self, x, y, SpeedItem.IMAGE, SpeedItem.SFX, groups)
+        DurationItem.__init__(self, x, y, SpeedItem.DURATION, SpeedItem.IMAGE, SpeedItem.SFX, groups)
 
     def apply_effect(self, tank):
-        min_speed, max_speed = 200, 500
-        boost = min_speed + random.random() * (max_speed - min_speed)
-        tank.vel += vec(boost, 0).rotate(-tank.rot)
-        super().kill()
+        tank.ACCELERATION *= SpeedItem.BOOST_PCT
+        super().apply_effect(tank)
+
+    def _remove_effect(self):
+        self._tank.ACCELERATION /= SpeedItem.BOOST_PCT
 
 
-def spawn_box(x, y, groups):
+def spawn_box(groups):
+    pos = random.choice(ItemBox.SPAWN_LOCATIONS)
     if random.random() < WoodenBox.SPAWN_RATE:
-        WoodenBox(x, y, groups)
+        WoodenBox(*pos, groups)
     else:
-        MetalBox(x, y, groups)
+        MetalBox(*pos, groups)

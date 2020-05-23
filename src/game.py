@@ -165,7 +165,7 @@ class GamePlayingState:
     def pause(self):
         if self._paused:
             self._game.ui.pop_menu()
-            self._timer.unpause()
+            Timer.unpause_timers()
         else:
             actions = [
                 {'action': self.pause,'text': 'Resume'},
@@ -173,7 +173,7 @@ class GamePlayingState:
                 {'action': lambda: self._game.set_state(GameNotPlayingState),'text': 'Main Menu'}
             ]
             self._game.ui.make_menu("Game Paused", actions, 24, cfg.WHITE)
-            self._timer.pause()
+            Timer.pause_timers()
         self._paused = not self._paused
 
     def game_over(self):
@@ -202,7 +202,7 @@ class GamePlayingState:
     def draw(self):
         self._level.draw(self._game.screen)
         self._game.ui.draw(self._game.screen)
-        total_secs = self._timer.get_seconds()
+        total_secs = self._timer.elapsed_time() // 1000
         mins = total_secs // 60
         secs = total_secs % 60
         gtext.render(self._game.screen, f"{mins:02d}:{secs:02d}", 24, cfg.WHITE, location='n')

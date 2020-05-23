@@ -6,6 +6,7 @@ from src.input.input_state import InputState
 import src.utility.game_text as gtext
 import src.utility.sprite_loader as sprite_loader
 from src.utility.timer import Timer
+from src.sprites.barrel import RELOAD_DURATION
 
 # Tank options and stats.
 _ROT_SPEED = 75
@@ -107,7 +108,7 @@ class PlayerCtrl:
         self.ammo_count_surf.fill(cfg.BLACK)
 
         if self._tank.get_ammo_count() == 0:
-            ammo_text = f"{10 - self._ammo_timer.get_seconds()}"
+            ammo_text = f"{(RELOAD_DURATION - self._ammo_timer.elapsed_time()) // 1000}"
         else:
             ammo_text = f"{self._tank.get_ammo_count()} / {self._tank.max_ammo}"
         gtext.render(self.ammo_count_surf, ammo_text, 12, cfg.WHITE)
