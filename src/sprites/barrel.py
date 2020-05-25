@@ -76,7 +76,7 @@ class Barrel(SpriteW, Rotatable):
         self._ammo_count -= 1
 
     def can_reload(self):
-        return self._fire_timer.elapsed_time() > RELOAD_DURATION
+        return self._ammo_count == 0 and self._fire_timer.elapsed_time() > RELOAD_DURATION
 
     def get_ammo_count(self):
         return self._ammo_count

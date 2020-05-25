@@ -10,7 +10,6 @@ from src.sprites.barrel import Barrel
 
 
 class Tank(SpriteW, MovableNonlinear, Rotatable, Damageable):
-    ACCELERATION = 768
     KNOCKBACK = 100
 
     _SPEED_CUTOFF = 100
@@ -23,6 +22,7 @@ class Tank(SpriteW, MovableNonlinear, Rotatable, Damageable):
         Rotatable.__init__(self)
         Damageable.__init__(self, self.hit_rect)
         self.groups = groups
+        self.MAX_ACCELERATION = 768
         self._barrels = []
         self._items = []
         self.hit_rect.center = self.pos
@@ -106,6 +106,7 @@ class ColorTank(Tank):
 
 
 class BigTank(Tank):
+    ACC_MULTIPLIER = 1
     _IMAGE = "tankBody_bigRed.png"
     def __init__(self, x, y, groups):
         Tank.__init__(self, x, y, BigTank._IMAGE, groups)
@@ -117,9 +118,11 @@ class BigTank(Tank):
         self.equip_barrel(barrel)
         self.max_ammo = self._barrels[0].get_ammo_count()
         self.color = "Dark"
+        self.MAX_ACCELERATION *= BigTank.ACC_MULTIPLIER
 
 
 class LargeTank(Tank):
+    ACC_MULTIPLIER = 0.9
     _IMAGE = "tankBody_darkLarge.png"
     def __init__(self, x, y, groups):
         Tank.__init__(self, x, y, LargeTank._IMAGE, groups)
@@ -131,8 +134,10 @@ class LargeTank(Tank):
         self.equip_barrel(barrel)
         self.max_ammo = self._barrels[0].get_ammo_count()
         self.color = "Dark"
+        self.MAX_ACCELERATION *= LargeTank.ACC_MULTIPLIER
 
 class HugeTank(Tank):
+    ACC_MULTIPLIER = 0.8
     _IMAGE = "tankBody_huge_outline.png"
     def __init__(self, x, y, groups):
         Tank.__init__(self, x, y, HugeTank._IMAGE, groups)
@@ -145,6 +150,7 @@ class HugeTank(Tank):
         self.equip_barrel(barrel)
         self.max_ammo = self._barrels[0].get_ammo_count()
         self.color = "Dark"
+        self.MAX_ACCELERATION *= HugeTank.ACC_MULTIPLIER
 
 
 class Tracks(SpriteW):

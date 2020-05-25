@@ -2,13 +2,12 @@ import pygame as pg
 
 import src.config as cfg
 from src.sprites.spriteW import SpriteW, collide_hit_rect
-vec = pg.math.Vector2
 
 
 class Movable:
     def __init__(self, x, y):
-        self.pos = vec(x, y)
-        self.vel = vec(0, 0)
+        self.pos = cfg.Vec2(x, y)
+        self.vel = cfg.Vec2(0, 0)
 
     def move(self, dt):
         # By default, Movable objects like bullets ignore colliders.
@@ -17,10 +16,9 @@ class Movable:
         self.hit_rect.center = self.pos
 
 class MovableNonlinear(Movable):
-    SPEED_CUTOFF = 0
     def __init__(self, x, y):
         Movable.__init__(self, x, y)
-        self.acc = vec(0, 0)
+        self.acc = cfg.Vec2(0, 0)
         self._hit_wall = False
 
     # @override
@@ -30,12 +28,13 @@ class MovableNonlinear(Movable):
 
         # Effect kinematic equations.
         self.vel += self.acc * dt
-        if self.vel.length_squared() < self.SPEED_CUTOFF:
+        if self.vel.length_squared() < 1:
             self.vel.x = 0
-            selv.vel.y = 0
+            self.vel.y = 0
+            displacement = cfg.Vec2(0, 0)
         else:
             displacement = (self.vel * dt) + (0.5 * self.acc * dt**2)
-            self._handle_colliders(displacement, collider_groups)
+        self._handle_colliders(displacement, collider_groups)
 
     def _handle_colliders(self, displacement, collider_group):
         self._hit_wall = False
@@ -60,6 +59,7 @@ class MovableNonlinear(Movable):
         collider = pg.sprite.spritecollideany(self, collider_group, collide_hit_rect)
 
         if collider:
+            # self.pos.y -= displacement.y
             # self.pos.y -= self.vel.y
             # Hit top of collider.
             if self.pos.y < collider.rect.centery:
@@ -70,7 +70,6 @@ class MovableNonlinear(Movable):
             self.vel.y = 0
             self.hit_rect.centery = self.pos.y
             self._hit_wall = True
-            
         self.rect.center = self.pos
 
     def collided_with_wall(self):

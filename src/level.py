@@ -48,10 +48,10 @@ class Level:
         return self._item_timer.elapsed_time() > Level.ITEM_RESPAWN_TIME
 
     def update(self, dt):
-        self._groups['all'].update(dt)
-        # Update list of ai mobs.
         for ai in self._ai_mobs:
             ai.update(dt)
+        self._groups['all'].update(dt)
+        # Update list of ai mobs.
         self._camera.update()
 
         # Handle damage-causing bullets.

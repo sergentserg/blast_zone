@@ -151,11 +151,11 @@ class SpeedItem(DurationItem):
         DurationItem.__init__(self, x, y, SpeedItem.DURATION, SpeedItem.IMAGE, SpeedItem.SFX, groups)
 
     def apply_effect(self, tank):
-        tank.ACCELERATION *= SpeedItem.BOOST_PCT
+        tank.MAX_ACCELERATION *= SpeedItem.BOOST_PCT
         super().apply_effect(tank)
 
     def _remove_effect(self):
-        self._tank.ACCELERATION /= SpeedItem.BOOST_PCT
+        self._tank.MAX_ACCELERATION /= SpeedItem.BOOST_PCT
 
 
 def spawn_box(groups):

@@ -25,7 +25,7 @@ class AITankCtrl(AIMob):
         self._sprite.rotate_barrel(dir)
 
     def move(self, pct=1):
-        self._sprite.acc = cfg.Vec2(self._sprite.ACCELERATION * pct, 0).rotate(-self._sprite.rot)
+        self._sprite.acc = cfg.Vec2(self._sprite.MAX_ACCELERATION * pct, 0).rotate(-self._sprite.rot)
 
     def get_next_destination(self):
         return next(self._path_points)
@@ -34,17 +34,20 @@ class AITankCtrl(AIMob):
 class AITankState:
     WALL_AVOID_DURATION = 1000
     WALL_TURN_ANGLE = 15
+    _crash_timer = Timer()
     def __init__(self, ai):
         self._ai = ai
-        self._crash_timer = Timer()
+        # self._crash_time = -math.inf
 
     def check_for_walls(self):
         if self._ai.tank.collided_with_wall():
-            self._crash_timer.restart()
+            # self._crash_time = pg.time.get_ticks()
+            AITankState._crash_timer.restart()
             self._ai.rotate_to(self._ai.tank.rot + AITankState.WALL_TURN_ANGLE)
 
     def is_avoiding_wall(self):
-        return self._crash_timer.elapsed_time() < AITankState.WALL_AVOID_DURATION
+        # return cfg.time_since(self._crash_time) < AITankState.WALL_AVOID_DURATION
+        return AITankState._crash_timer.elapsed_time() < AITankState.WALL_AVOID_DURATION
 
 
 class AIPatrolState(AITankState):
@@ -66,7 +69,7 @@ class AIPatrolState(AITankState):
 
                 dir = (self._destination - self._ai.tank.pos).angle_to(cfg.UNIT_VEC)
                 self._ai.rotate_to(dir)
-        self._ai.move(pct=0.5)
+        self._ai.move(pct=0.75)
 
     def arrived(self):
         dist = (self._destination - self._ai.tank.pos).length_squared()
@@ -76,7 +79,6 @@ class AIPatrolState(AITankState):
 class AIPursueState(AITankState):
     def __init__(self, ai):
         AITankState.__init__(self, ai)
-        self.pursue_start = pg.time.get_ticks()
 
     def update(self, dt):
         self.check_for_walls()
@@ -90,7 +92,7 @@ class AIPursueState(AITankState):
                     self._ai.set_state(AIPatrolState)
             else:
                 self._ai.set_state(AIFleeState)
-        self._ai.move()
+        self._ai.move(pct=0.9)
 
 
 class AIFleeState(AITankState):

@@ -59,6 +59,7 @@ class TiledMapLoader:
         # Spawn enemy AI tank and provide path information.
         ai_path_data.sort(key=lambda point: point.path_index)
         tank = LargeTank(ai_tank.x, ai_tank.y, groups)
+        # tank = ColorTank(ai_tank.x, ai_tank.y, "blue", "standard", groups)
         tank_ctrl = AITankCtrl(tank, ai_path_data, player.tank)
         ai_mobs.append(tank_ctrl)
 

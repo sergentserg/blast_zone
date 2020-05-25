@@ -58,10 +58,10 @@ class PlayerCtrl:
             self._tank.fire()
 
     def forward(self):
-        self._tank.acc = cfg.Vec2(self._tank.ACCELERATION, 0).rotate(-self._tank.rot)
+        self._tank.acc = cfg.Vec2(self._tank.MAX_ACCELERATION, 0).rotate(-self._tank.rot)
 
     def reverse(self):
-        self._tank.acc = cfg.Vec2(-self._tank.ACCELERATION, 0).rotate(-self._tank.rot)
+        self._tank.acc = cfg.Vec2(-self._tank.MAX_ACCELERATION, 0).rotate(-self._tank.rot)
 
     def ccw_turn(self):
         self._tank.rot_speed = _ROT_SPEED
